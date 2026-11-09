@@ -1,0 +1,1291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23141414'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='Georgia,serif' font-size='20' fill='%23fff'%3Er%3C/text%3E%3Ccircle cx='25' cy='21' r='2.5' fill='%23E98255'/%3E%3C/svg%3E">
+<meta property="og:title" content="Roamly — Less planning. More living.">
+<meta property="og:description" content="Curated trips to Cape Town, Marrakech, Bali and Zanzibar. A design concept.">
+<meta property="og:image" content="img/hero-poster.webp">
+<title>Roamly</title>
+<meta name="description" content="Roamly — curated trips to Cape Town, Marrakech, Bali and Zanzibar. Less planning. More living. (Design concept)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: travel-journal editorial — cinematic photo chapters driven by scroll (hero zoom, pinned horizontal gallery, drawn routes) between sand pages */
+:root{
+  --paper:#FFFFFF; --paper-2:#F5F3EF; --card:#FFFFFF;
+  --ink:#141414; --ink-2:#5F5E5A; --line:rgba(20,20,20,.12);
+  --band:#F5F3EF; --band-2:#ECE8E1; --on-band:#141414; --on-band-2:rgba(20,20,20,.62); --band-line:rgba(20,20,20,.12);
+  --sun:#E98255; --sun-ink:#B0502A; --on-sun:#141414; --on-image:#FFFFFF;
+  --ok:#2E7D53; --err:#B23A2A; --err-bg:#FBEAE6; --ok-bg:#E6F2EA;
+  --f-display:"DM Serif Display","Iowan Old Style",Georgia,serif;
+  --f-body:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --gutter:max(16px, env(safe-area-inset-left, 0px)); --gutter-r:max(16px, env(safe-area-inset-right, 0px));
+  --max:1240px; --r:8px;
+  color-scheme:light;
+}
+/* dark contrast blocks (footer, key panels) use a scoped charcoal palette */
+.dark{--band:#141414;--band-2:#222;--on-band:#FFFFFF;--on-band-2:rgba(255,255,255,.66);--band-line:rgba(255,255,255,.14);--line:rgba(255,255,255,.14);background:var(--band);color:var(--on-band)}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:90px}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;line-height:1.02;margin:0;text-wrap:balance;letter-spacing:-.015em}
+p{margin:0}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter-r)}
+.sec{padding-block:clamp(80px,11vw,140px)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--sun-ink)}
+.dark .eyebrow{color:var(--sun)}
+.h2{font-size:clamp(40px,6.6vw,88px)}
+.fine{font-size:13px;color:var(--ink-2);line-height:1.5}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.w>span{display:inline-block;will-change:transform}
+
+/* Buttons */
+.btn{--h:48px;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:var(--h);padding:0 22px;border-radius:999px;border:1.5px solid transparent;font:600 15px/1 var(--f-body);text-decoration:none;cursor:pointer;transition:transform .15s ease,background-color .2s ease,color .2s ease,border-color .2s ease;white-space:nowrap}
+.btn:active{transform:translateY(1px) scale(.97)}
+.btn-sun{background:var(--sun);color:var(--on-sun)}
+.btn-sun:hover{background:#F09468}
+.btn-ink{background:var(--ink);color:var(--paper)}
+.btn-ink:hover{background:var(--band-2);color:var(--on-band)}
+.btn-ghost{border-color:currentColor;background:transparent;color:inherit}
+.btn-ghost:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.band .btn-ghost:hover,.on-image .btn-ghost:hover,.dcard .btn-ghost:hover{background:var(--on-image);color:#141414;border-color:var(--on-image)}
+.btn-sm{--h:42px;padding:0 16px;font-size:14px}
+.btn .arr{transition:transform .2s ease}
+.btn:hover .arr{transform:translateX(4px)}
+.link{font:inherit;font-weight:600;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1.5px;background:none;border:0;padding:0;cursor:pointer;color:inherit}
+.link:hover{color:var(--sun-ink)}
+
+/* Nav: floating pill */
+.navshell{position:fixed;left:0;right:0;top:calc(14px + env(safe-area-inset-top,0px));z-index:50;display:flex;justify-content:center;padding-left:var(--gutter);padding-right:var(--gutter-r);pointer-events:none;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.navshell.hide{transform:translateY(calc(-100% - 30px))}
+.pill{pointer-events:auto;display:flex;align-items:center;gap:6px;width:100%;max-width:820px;background:rgba(255,255,255,.96);color:#141414;border-radius:999px;padding:6px 6px 6px 18px;box-shadow:0 12px 40px -14px rgba(0,0,0,.35),inset 0 0 0 1px rgba(20,20,20,.08);position:relative}
+.logo{display:flex;align-items:baseline;gap:2px;text-decoration:none;font-family:var(--f-display);font-size:26px;line-height:1;letter-spacing:-.02em;color:inherit;margin-right:auto;padding:6px 0}
+.logo i{width:7px;height:7px;border-radius:50%;background:var(--sun);display:inline-block;transform:translateY(-2px);transition:transform .4s cubic-bezier(.3,1.8,.5,1)}
+.logo:hover i{transform:translateY(-10px)}
+.links{display:none;position:relative;list-style:none;margin:0;padding:0;gap:2px}
+.links a{position:relative;z-index:1;display:block;padding:10px 15px;border-radius:999px;text-decoration:none;font-weight:600;font-size:14px;color:rgba(20,20,20,.62);transition:color .25s ease}
+.links a:hover,.links a.active{color:#141414}
+.links .blob{position:absolute;z-index:0;top:0;left:0;height:100%;border-radius:999px;background:#F1EEE9;opacity:0;transition:transform .45s cubic-bezier(.3,1.3,.5,1),width .45s cubic-bezier(.3,1.3,.5,1),opacity .25s ease}
+.links .dot{position:absolute;bottom:3px;left:0;width:5px;height:5px;border-radius:50%;background:var(--sun);opacity:0;transition:transform .5s cubic-bezier(.3,1.3,.5,1),opacity .3s ease}
+.pill .cta{--h:42px;padding:0 18px;font-size:14px}
+.menubtn{display:inline-flex;align-items:center;gap:10px;height:42px;padding:0 16px;border-radius:999px;border:0;background:#F1EEE9;color:#141414;font:600 14px/1 var(--f-body);cursor:pointer}
+.menubtn .bars{width:16px;height:10px;position:relative}
+.menubtn .bars::before,.menubtn .bars::after{content:"";position:absolute;left:0;right:0;height:1.5px;background:currentColor;transition:transform .35s ease,top .35s ease}
+.menubtn .bars::before{top:1px}.menubtn .bars::after{top:7px;left:5px}
+.menubtn[aria-expanded="true"] .bars::before{top:4px;transform:rotate(45deg)}
+.menubtn[aria-expanded="true"] .bars::after{top:4px;left:0;transform:rotate(-45deg)}
+.mnav{position:fixed;inset:0;z-index:49;background:#FFFFFF;color:#141414;padding:calc(96px + env(safe-area-inset-top,0px)) var(--gutter-r) calc(28px + env(safe-area-inset-bottom,0px)) var(--gutter);display:flex;flex-direction:column;gap:6px;overflow:auto;clip-path:circle(0 at calc(100% - 60px) 40px);transition:clip-path .7s cubic-bezier(.7,0,.2,1),visibility 0s .7s;visibility:hidden}
+.mnav.open{clip-path:circle(150% at calc(100% - 60px) 40px);visibility:visible;transition:clip-path .8s cubic-bezier(.7,0,.2,1)}
+.mnav a.m{font-family:var(--f-display);font-size:clamp(44px,13vw,64px);line-height:1.05;text-decoration:none;padding:8px 0;border-bottom:1px solid rgba(20,20,20,.1);display:flex;justify-content:space-between;align-items:baseline;transform:translateY(40px);opacity:0;transition:transform .7s cubic-bezier(.2,.7,.2,1),opacity .5s ease}
+.mnav a.m small{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;color:var(--sun)}
+.mnav.open a.m{transform:none;opacity:1}
+.mnav.open a.m:nth-child(1){transition-delay:.25s}.mnav.open a.m:nth-child(2){transition-delay:.3s}.mnav.open a.m:nth-child(3){transition-delay:.35s}.mnav.open a.m:nth-child(4){transition-delay:.4s}
+.mnav .thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:20px}
+.mnav .thumbs img{aspect-ratio:3/4;object-fit:cover;border-radius:8px;width:100%;transform:translateY(30px) scale(.9);opacity:0;transition:transform .8s cubic-bezier(.2,.7,.2,1) .45s,opacity .6s ease .45s}
+.mnav.open .thumbs img{transform:none;opacity:1}
+.mnav .btn{margin-top:auto;width:100%}
+@media (min-width:960px){.links{display:flex}.menubtn,.mnav{display:none!important}}
+@media (max-width:420px){.pill .cta{padding:0 14px}.pill .cta .full{display:none}}
+@media (min-width:421px){.pill .cta .short{display:none}}
+
+/* Cursor label */
+.cur{position:fixed;left:0;top:0;z-index:70;pointer-events:none;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:999px;background:var(--sun);color:var(--on-sun);display:grid;place-items:center;font:700 12px/1 var(--f-body);letter-spacing:.02em;white-space:nowrap;opacity:0;transition:width .35s cubic-bezier(.3,1.4,.5,1),height .35s cubic-bezier(.3,1.4,.5,1),margin .35s cubic-bezier(.3,1.4,.5,1),opacity .3s ease}
+.cur span{opacity:0;transition:opacity .2s ease}
+.cur.on{opacity:1}
+.cur.big{width:88px;height:88px;margin:-44px 0 0 -44px}
+.cur.big span{opacity:1}
+
+/* Hero: video film + "roam" cutout intro */
+.hero{position:relative;background:#111}
+.stage{position:relative;isolation:isolate;height:100vh;height:100svh;min-height:600px;overflow:hidden;color:var(--on-image)}
+.stage video,.stage .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-3}
+.stage::after{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(12,12,12,.45) 0%,rgba(12,12,12,0) 30%,rgba(12,12,12,.1) 55%,rgba(12,12,12,.82) 100%)}
+.grain{position:absolute;inset:-50%;z-index:-1;pointer-events:none;opacity:.08;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-6%,4%)}40%{transform:translate(4%,-6%)}60%{transform:translate(-4%,-2%)}80%{transform:translate(6%,6%)}100%{transform:translate(0,0)}}
+.cutout{position:absolute;inset:0;z-index:2;display:none;pointer-events:none}
+.cutout svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;will-change:transform}
+.intro .cutout{display:block}
+.intro-copy{position:absolute;inset:0;z-index:3;display:none;flex-direction:column;justify-content:space-between;padding:calc(96px + env(safe-area-inset-top,0px)) var(--gutter-r) 28px var(--gutter);color:var(--ink);pointer-events:none}
+.intro .intro-copy{display:flex}
+.intro-copy .row{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;max-width:var(--max);margin:0 auto;width:100%}
+.intro-copy .big{font-family:var(--f-display);font-size:clamp(22px,2.6vw,34px);line-height:1.1;max-width:18ch}
+.intro-copy .big em{color:var(--sun-ink)}
+.intro-copy .mono{color:var(--ink-2);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+.scrollcue{display:flex;align-items:center;gap:10px;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.scrollcue i{width:1.5px;height:36px;background:currentColor;opacity:.3;position:relative;overflow:hidden}
+.scrollcue i::after{content:"";position:absolute;left:0;top:-40%;width:100%;height:40%;background:var(--sun);animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{to{top:100%}}
+.hero-copy{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-copy .wrap{width:100%;padding-block:0 28px;display:grid;gap:28px}
+.hero .eyebrow{color:#FFC7A8}
+.hero h1{font-size:clamp(40px,10.4vw,64px);line-height:.98;margin-top:16px}
+@media (min-width:768px){.hero h1{font-size:min(6.8vw,104px)}.hero h1 .l1{white-space:nowrap}}
+@media (max-width:767px){.hero h1 br{display:none}}
+.hero h1 em{font-style:italic;color:#FFC7A8}
+.hero .sub{font-size:clamp(17px,1.7vw,20px);max-width:40ch;color:rgba(255,248,238,.9);margin-top:20px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.hero .btn-ghost{color:var(--on-image)}
+.hero-foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px 24px;border-top:1px solid rgba(255,248,238,.28);padding-top:16px}
+.trust{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:rgba(255,248,238,.92);list-style:none;margin:0;padding:0}
+.trust li{display:flex;gap:8px;align-items:center}
+.reel{display:flex;align-items:center;gap:12px}
+.chapter{display:flex;align-items:center;gap:12px;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,248,238,.85)}
+.chapter .ring{width:30px;height:30px;transform:rotate(-90deg)}
+.chapter .ring circle{fill:none;stroke-width:2}
+.chapter b{font-family:var(--f-display);font-size:22px;letter-spacing:0;text-transform:none;font-weight:400;color:#fff;display:inline-block;min-width:5.5ch}
+.chapter b.swap{animation:swapIn .6s cubic-bezier(.2,.7,.2,1)}
+@keyframes swapIn{from{transform:translateY(60%);opacity:.001}to{transform:none;opacity:1}}
+.vidbtn{width:42px;height:42px;border-radius:50%;border:1.5px solid rgba(255,248,238,.5);background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer;transition:background .2s,border-color .2s}
+.vidbtn:hover{background:rgba(255,248,238,.15);border-color:#fff}
+
+/* Marquee */
+.marquee{background:var(--sun);color:var(--on-sun);overflow:hidden;white-space:nowrap;border-block:1px solid rgba(37,40,37,.2)}
+.marquee .row{display:inline-flex;gap:40px;padding-block:18px;animation:mq 36s linear infinite;will-change:transform}
+.marquee span{font-family:var(--f-display);font-size:clamp(28px,4vw,52px);line-height:1;display:inline-flex;align-items:center;gap:40px}
+.marquee span::after{content:"✦";font-size:.5em}
+.marquee em{font-family:var(--f-mono);font-style:normal;font-size:12px;letter-spacing:.1em;align-self:center}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* Section heads */
+.shead{display:grid;gap:18px;margin-bottom:clamp(36px,5vw,56px)}
+.shead .lede{font-size:18px;color:var(--ink-2);max-width:34ch}
+.band .shead .lede{color:var(--on-band-2)}
+@media (min-width:880px){.shead{grid-template-columns:1.5fr 1fr;align-items:end;gap:48px}.shead .lede,.shead .label-sample{justify-self:end}}
+
+/* Destinations: pinned horizontal gallery */
+.dest-sec{padding-block:clamp(80px,10vw,120px) 0;overflow:hidden}
+.dest-pin{padding-bottom:clamp(56px,7vw,96px)}
+.dtrack-wrap{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-left:var(--gutter);padding-right:var(--gutter-r)}
+.dtrack-wrap::-webkit-scrollbar{display:none}
+.dtrack{display:flex;gap:16px;width:max-content}
+.dcard{position:relative;isolation:isolate;flex:none;width:min(84vw,420px);height:clamp(500px,72vh,620px);border-radius:var(--r);overflow:hidden;scroll-snap-align:start;color:var(--on-image);display:flex;flex-direction:column;justify-content:space-between;padding:18px;background:#111}
+.dcard .ph{position:absolute;inset:0;z-index:-2;overflow:hidden;cursor:pointer}
+.dcard .ph img{width:116%;max-width:none;height:100%;margin-left:-8%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.dcard:hover .ph img{transform:scale(1.06)}
+.dcard::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(12,12,12,.35) 0%,rgba(12,12,12,0) 30%,rgba(12,12,12,.25) 55%,rgba(12,12,12,.9) 100%)}
+.dtop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tag{background:var(--on-image);color:#252825;font:600 12px/1 var(--f-body);padding:8px 11px;border-radius:999px}
+.dnum{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em}
+.dbody{display:grid;gap:10px}
+.dbody .coord{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;opacity:.85}
+.dcard h3{font-size:clamp(52px,7vw,78px);line-height:.9}
+.dbody .country{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.dbody .desc{font-size:15px;color:rgba(255,248,238,.88);max-width:30ch}
+.dmeta{display:flex;justify-content:space-between;align-items:end;gap:12px;border-top:1px solid rgba(255,248,238,.3);padding-top:12px;margin-top:4px}
+.price{font-family:var(--f-display);font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.price small{font-family:var(--f-body);font-size:13px;opacity:.8}
+.best{font-size:11px;font-family:var(--f-mono);letter-spacing:.06em;text-align:right;opacity:.9}
+.dact{display:flex;gap:8px;flex-wrap:wrap}
+.dact .btn{flex:1 1 auto}
+.dcard .btn-ghost{color:var(--on-image)}
+.dcard.end{background:var(--band);justify-content:center;gap:20px;color:var(--on-band)}
+.dcard.end::after{display:none}
+.dcard.end h3{font-size:clamp(44px,5vw,60px)}
+.dcard.end p{color:var(--on-band-2)}
+.dcard.end .btn{align-self:flex-start}
+.dnote{margin-top:20px;padding-left:var(--gutter);padding-right:var(--gutter-r)}
+.dnote p{max-width:var(--max);margin:0 auto}
+@media (min-width:1024px){
+  .dtrack-wrap{overflow:visible;scroll-snap-type:none}
+  .dtrack{gap:24px;padding-left:max(0px,calc((100vw - var(--max))/2))}
+  .dcard{width:clamp(380px,32vw,460px);height:min(70vh,640px)}
+}
+
+
+/* Journey map (pinned) */
+.journey{background:var(--paper-2);border-block:1px solid var(--line)}
+.jr-stage{position:relative;overflow:hidden;padding-block:96px 32px;display:grid;gap:24px}
+.jr-head{position:relative;z-index:3;max-width:var(--max);margin:0 auto;width:100%;padding-left:var(--gutter);padding-right:var(--gutter-r)}
+.jr-title{font-size:clamp(40px,6vw,84px);margin-top:12px;max-width:12ch}
+.jr-title em{color:var(--sun-ink)}
+.jr-map{display:block;width:100%;height:auto;aspect-ratio:16/9;max-width:100%}
+.jr-map .dots{fill:none;stroke:#141414;stroke-opacity:.16;stroke-width:8.8;stroke-linecap:round}
+.jr-map .route{fill:none;stroke:var(--sun);stroke-width:3;stroke-linecap:round}
+.jr-map .routes-ghost path{fill:none;stroke:#141414;stroke-opacity:.18;stroke-width:1.5;stroke-dasharray:2 8;stroke-linecap:round}
+.jr-map .mk .halo{fill:var(--sun);opacity:.18}
+.jr-map .mk .core{fill:var(--sun);stroke:#fff;stroke-width:3}
+.jr-map .mk text{font:500 20px var(--f-mono);letter-spacing:.06em;fill:#141414;text-transform:uppercase}
+.jr-map .jr-plane{fill:#141414;opacity:0}
+.jr-cards{display:grid;gap:12px;padding-left:var(--gutter);padding-right:var(--gutter-r);max-width:var(--max);margin:0 auto;width:100%}
+@media (min-width:720px){.jr-cards{grid-template-columns:repeat(2,1fr)}}
+.jr-card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:grid;grid-template-columns:120px 1fr;box-shadow:0 30px 60px -30px rgba(0,0,0,.3);min-width:0}
+.jr-card img{width:100%;height:100%;object-fit:cover;min-height:100%}
+.jr-cb{padding:16px 18px;display:grid;gap:6px;align-content:start;min-width:0}
+.jr-num{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sun-ink)}
+.jr-card h3{font-size:clamp(30px,3vw,40px)}
+.jr-co{font-size:13px;color:var(--ink-2);font-family:var(--f-mono)}
+.jr-card dl{display:grid;grid-template-columns:repeat(3,auto);gap:4px 14px;margin:6px 0 8px;justify-content:start}
+.jr-card dt{font-family:var(--f-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.jr-card dd{margin:0;font-weight:700;font-size:14px}
+.jr-card .btn{justify-self:start}
+.jr-sum{grid-template-columns:1fr;background:#141414;color:#fff;border-color:transparent}
+.jr-sum .jr-co{color:rgba(255,255,255,.65)}
+.jr-sum h3{font-size:clamp(34px,3.6vw,48px)}
+.jr-steps{display:none}
+/* animated mode */
+.anim .jr-stage{height:100vh;height:100svh;min-height:620px;padding:0;display:block}
+.anim .jr-head{position:absolute;left:0;right:0;top:calc(96px + env(safe-area-inset-top,0px))}
+.anim .jr-map{position:absolute;inset:0;height:100%;aspect-ratio:auto}
+.anim .jr-cards{position:absolute;right:max(var(--gutter-r),calc((100vw - var(--max))/2 + 16px));bottom:40px;left:auto;width:min(440px,calc(100% - 32px));padding:0;margin:0;display:block}
+.anim .jr-card{position:absolute;right:0;bottom:0;width:100%;opacity:0;visibility:hidden}
+.anim .jr-steps{display:flex;position:absolute;left:max(var(--gutter),calc((100vw - var(--max))/2 + 16px));bottom:44px;gap:6px;list-style:none;margin:0;padding:0;z-index:3}
+.jr-steps li{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);transition:background .3s,color .3s,border-color .3s}
+.jr-steps li.on{background:var(--sun);color:var(--on-sun);border-color:var(--sun)}
+@media (max-width:719px){.anim .jr-cards{left:var(--gutter);right:var(--gutter-r);width:auto;bottom:20px}.anim .jr-steps{top:auto;bottom:auto;left:var(--gutter);top:calc(96px + env(safe-area-inset-top,0px) + 120px)}.jr-steps li{padding:6px 9px;font-size:10px}.jr-card{grid-template-columns:96px 1fr}}
+
+/* Collage zoom (pinned) */
+.collage{background:var(--paper)}
+.cl-stage{position:relative;overflow:hidden;height:100vh;height:100svh;min-height:560px;isolation:isolate}
+.cl-center{position:absolute;inset:0;z-index:1}
+.cl-center picture,.cl-center img{display:block;width:100%;height:100%;object-fit:cover}
+.cl-center::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,12,12,.1),rgba(12,12,12,.65))}
+.cl-over{position:absolute;z-index:2;left:0;right:0;bottom:0;padding:0 var(--gutter-r) clamp(32px,6vw,72px) var(--gutter);max-width:var(--max);margin:0 auto;color:#fff;display:grid;gap:18px;justify-items:start}
+.cl-over .eyebrow{color:#FFC7A8}
+.cl-big{font-family:var(--f-display);font-size:clamp(36px,5.4vw,76px);line-height:1;max-width:16ch;text-wrap:balance}
+.cl-big em{color:#FFC7A8}
+.cl-tiles{display:none}
+.cl-words{position:absolute;z-index:3;inset:0;display:none;flex-direction:column;justify-content:center;align-items:center;gap:0;font-size:clamp(54px,12.5vw,210px);line-height:.92;color:#fff;mix-blend-mode:difference;pointer-events:none;text-align:center;white-space:nowrap}
+.anim .cl-tiles{display:block;position:absolute;inset:0;z-index:2;pointer-events:none}
+.anim .cl-words{display:flex}
+.tile{position:absolute;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:calc(var(--w) * 1vw);aspect-ratio:4/5;max-width:none;object-fit:cover;border-radius:10px;transform:translate(-50%,-50%);box-shadow:0 20px 50px -20px rgba(0,0,0,.35)}
+@media (max-width:719px){.tile{width:calc(var(--w) * 2vw)}}
+
+/* Featured */
+.band{background:var(--band);color:var(--on-band)}
+.band .fine{color:var(--on-band-2)}
+.feat{display:grid;gap:40px}
+@media (min-width:1000px){.feat{grid-template-columns:1fr 1fr;gap:72px;align-items:start}}
+.feat-img{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/5;max-width:100%}
+.feat-img picture{display:block;height:100%}
+.feat-img img{width:100%;height:100%;object-fit:cover;will-change:transform}
+@media (min-width:1000px){.feat-img{position:sticky;top:96px;aspect-ratio:auto;height:min(80vh,780px)}}
+.stamp{position:absolute;right:16px;top:16px;width:112px;height:112px;border-radius:50%;border:1.5px dashed rgba(255,248,238,.85);display:grid;place-items:center;text-align:center;color:var(--on-image);font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;line-height:1.4;background:rgba(0,0,0,.25);animation:spinS 24s linear infinite}
+.stamp b{display:block;font-family:var(--f-display);font-size:34px;letter-spacing:0;text-transform:none;font-weight:400;line-height:1}
+@keyframes spinS{to{transform:rotate(360deg)}}
+.feat h2{font-size:clamp(46px,7vw,92px);margin-top:14px}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--band-line);border:1px solid var(--band-line);border-radius:var(--r);overflow:hidden;margin:28px 0 32px}
+.facts>div{background:var(--band);padding:14px;min-width:0}
+.facts dt{font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-band-2)}
+.facts dd{margin:6px 0 0;font-family:var(--f-display);font-size:clamp(20px,2.6vw,30px);line-height:1.05}
+.itin{list-style:none;margin:0;padding:0;position:relative}
+.itin .rail{position:absolute;left:19px;top:22px;bottom:22px;width:1.5px;background:var(--band-line)}
+.itin .fill{position:absolute;inset:0;background:var(--sun);transform-origin:top}
+.itin li{display:grid;grid-template-columns:40px 1fr;gap:16px;padding:12px 0;position:relative}
+.itin .day{width:40px;height:40px;border-radius:50%;background:var(--sun);border:1.5px solid var(--sun);display:grid;place-items:center;font-family:var(--f-mono);font-size:13px;color:var(--on-sun);transition:background .35s ease,color .35s ease,transform .45s cubic-bezier(.3,1.6,.5,1)}
+.anim .itin li:not(.on) .day{background:var(--band);color:var(--sun);transform:scale(.8)}
+.itin li>div{transition:opacity .4s ease,transform .4s ease}
+.anim .itin li:not(.on)>div{opacity:.4;transform:translateX(-6px)}
+.itin h3{font-family:var(--f-body);font-weight:700;font-size:18px;line-height:1.3;letter-spacing:0}
+.itin p{color:var(--on-band-2);font-size:15px;margin-top:2px}
+.inex{display:grid;gap:20px;margin-top:28px;padding-top:24px;border-top:1px solid var(--band-line)}
+@media (min-width:560px){.inex{grid-template-columns:1fr 1fr}}
+.inex h3{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;margin-bottom:10px;color:var(--on-band-2)}
+.ticks{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:15px}
+.ticks li{display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start}
+.ticks svg{margin-top:4px}
+.feat-cta{display:flex;flex-wrap:wrap;gap:14px 18px;align-items:center;margin-top:30px}
+
+/* Why */
+.why{background:var(--paper-2)}
+.benefits{display:grid;gap:12px;grid-template-columns:1fr}
+@media (min-width:620px){.benefits{grid-template-columns:1fr 1fr}}
+@media (min-width:1080px){.benefits{grid-template-columns:repeat(4,1fr)}}
+.benefit{position:relative;overflow:hidden;border-radius:var(--r);padding:26px 22px 28px;display:flex;flex-direction:column;gap:12px;min-height:270px;background:var(--card);border:1px solid var(--line);transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.benefit:nth-child(2){background:#141414;color:#fff;border-color:transparent}
+.benefit:nth-child(3){background:var(--sun);color:var(--on-sun);border-color:transparent}
+.benefit:hover{transform:translateY(-6px) rotate(-.6deg)}
+.benefit .ic{width:52px;height:52px}
+.benefit h3{font-size:30px;margin-top:auto}
+.benefit p{font-size:15px;opacity:.82}
+.benefit .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;opacity:.7}
+
+/* How */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:16px;position:relative}
+@media (min-width:880px){.steps{grid-template-columns:repeat(3,1fr);gap:28px}}
+.step{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px 24px;display:grid;gap:12px;align-content:start}
+.step .n{font-family:var(--f-display);font-size:96px;line-height:.75;color:var(--sun);display:inline-block}
+.step h3{font-size:32px}
+.step p{color:var(--ink-2)}
+.flightwrap{display:none}
+@media (min-width:880px){.flightwrap{display:block;position:relative;height:90px;margin-bottom:12px}}
+.flightwrap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.flightwrap .plane{position:absolute;left:0;top:0;width:30px;height:30px;inset:auto;color:var(--sun-ink)}
+.after{margin-top:28px;display:flex;flex-wrap:wrap;gap:20px 32px;align-items:center;justify-content:space-between;background:var(--band);color:var(--on-band);border-radius:var(--r);padding:24px clamp(20px,4vw,36px)}
+.after p{font-family:var(--f-display);font-size:clamp(22px,2.4vw,30px);line-height:1.15;max-width:30ch}
+
+/* Styles selector */
+.styles-sec{background:var(--paper-2)}
+.sgrid{display:grid;gap:12px;grid-template-columns:1fr 1fr;list-style:none;margin:0;padding:0}
+.sgrid li:last-child{grid-column:1/-1}
+@media (min-width:720px){.sgrid{grid-template-columns:repeat(3,1fr)}.sgrid li:last-child{grid-column:auto}}
+@media (min-width:1100px){.sgrid{grid-template-columns:repeat(5,1fr)}}
+.sopt{all:unset;box-sizing:border-box;cursor:pointer;position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;width:100%;aspect-ratio:3/4;border-radius:var(--r);overflow:hidden;color:var(--on-image);background:#111;transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .25s ease}
+.sgrid li:last-child .sopt{aspect-ratio:16/9}
+@media (min-width:720px){.sgrid li:last-child .sopt{aspect-ratio:3/4}}
+.sopt:hover{transform:translateY(-4px)}
+.sopt:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.sopt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.sopt::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(12,12,12,0) 35%,rgba(12,12,12,.88))}
+.sopt:hover img{transform:scale(1.06)}
+.sopt .chk{position:absolute;right:12px;top:12px;width:32px;height:32px;border-radius:50%;background:rgba(255,248,238,.25);border:1.5px solid rgba(255,248,238,.9);display:grid;place-items:center;color:transparent;transition:background .2s,color .2s,transform .3s cubic-bezier(.3,1.8,.5,1)}
+.sopt .sb{padding:16px;display:grid;gap:4px}
+.sopt .sb b{font-family:var(--f-display);font-weight:400;font-size:clamp(22px,2.2vw,26px);line-height:1.05}
+.sopt .sb span{font-size:13px;opacity:.85;line-height:1.4}
+.sopt[aria-pressed="true"]{box-shadow:0 0 0 3px var(--sun)}
+.sopt[aria-pressed="true"]::after{background:linear-gradient(180deg,rgba(233,130,85,.2) 0%,rgba(12,12,12,.9))}
+.sopt[aria-pressed="true"] .chk{background:var(--sun);border-color:var(--sun);color:var(--on-sun);transform:scale(1.15)}
+.sopt[aria-pressed="true"] img{transform:scale(1.1)}
+.finder{margin-top:24px;display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+.finder .count{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.prompt{font-weight:600;color:var(--sun-ink);flex-basis:100%}
+.prompt:empty{display:none}
+.shake{animation:shake .45s ease}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.result{margin-top:24px;display:grid;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;animation:resIn .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes resIn{from{clip-path:inset(0 0 100% 0 round 8px);transform:translateY(20px)}to{clip-path:inset(0 0 0 0 round 8px);transform:none}}
+@media (min-width:760px){.result{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)}}
+.result .rph{aspect-ratio:16/10;max-width:100%;overflow:hidden}
+@media (min-width:760px){.result .rph{aspect-ratio:auto;height:100%;min-height:300px}}
+.result .rph img{width:100%;height:100%;object-fit:cover;animation:settle 1.4s cubic-bezier(.2,.7,.2,1) both}
+@keyframes settle{from{transform:scale(1.15)}to{transform:scale(1)}}
+.result .rb{padding:clamp(20px,3vw,36px);display:grid;gap:14px;align-content:center;min-width:0}
+.result h3{font-size:clamp(40px,5vw,64px)}
+.result .why-fit{color:var(--ink-2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.chips li{font-size:13px;font-weight:600;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:5px 10px}
+.also{font-size:14px;color:var(--ink-2)}
+
+/* Included */
+.ledger{display:grid;gap:12px}
+@media (min-width:820px){.ledger{grid-template-columns:1fr 1fr;gap:20px}}
+.ledger>div{border-radius:var(--r);padding:24px clamp(20px,3vw,32px)}
+.ledger .yes{background:var(--band);color:var(--on-band)}
+.ledger .no{background:var(--card);border:1px solid var(--line)}
+.ledger h3{font-size:34px;margin-bottom:12px}
+.ledger ul{list-style:none;margin:0;padding:0}
+.ledger li{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line);font-weight:600}
+.ledger .yes li{border-color:var(--band-line)}
+.ledger .yes svg{color:var(--sun)}
+.ledger .no svg{color:var(--err)}
+.ledger svg{flex:none}
+.varies{margin-top:16px}
+
+/* Profiles */
+.profiles{display:grid;gap:28px}
+@media (min-width:760px){.profiles{grid-template-columns:repeat(3,1fr);gap:24px}}
+.profile{display:grid;gap:14px;align-content:start;min-width:0}
+.profile .pph{aspect-ratio:4/5;overflow:hidden;border-radius:var(--r);max-width:100%}
+.profile .pph img{width:100%;height:118%;max-width:none;object-fit:cover;will-change:transform}
+.profile .who{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.profile blockquote{margin:0;font-family:var(--f-display);font-style:italic;font-size:clamp(22px,2.2vw,26px);line-height:1.25}
+.label-sample{display:inline-flex;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:1px dashed var(--ink-2);color:var(--ink-2);padding:6px 10px;border-radius:999px;justify-self:start;align-self:end}
+
+/* Enquiry */
+.enq{display:grid;gap:40px}
+@media (min-width:1000px){.enq{grid-template-columns:.85fr 1.15fr;gap:72px;align-items:start}.enq-side{position:sticky;top:100px}}
+.next{list-style:none;margin:28px 0 0;padding:0;display:grid}
+.next li{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-top:1px solid var(--band-line);color:var(--on-band)}
+.next .k{font-family:var(--f-mono);font-size:12px;color:var(--sun);padding-top:3px}
+.demo{margin-top:20px;font-size:12px;color:var(--on-band-2);font-family:var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.formcard{background:var(--card);border:1px solid var(--line);box-shadow:0 30px 60px -40px rgba(0,0,0,.25);color:var(--ink);border-radius:var(--r);padding:clamp(20px,4vw,40px);min-width:0}
+.formcard form{display:grid;gap:20px}
+.row2{display:grid;gap:20px}
+@media (min-width:620px){.row2{grid-template-columns:1fr 1fr}}
+.field{display:grid;gap:6px;min-width:0}
+.field label,.field legend{font-weight:600;font-size:14px}
+.field .opt{font-weight:400;color:var(--ink-2)}
+input[type=text],input[type=email],input[type=number],select,textarea{width:100%;font:16px/1.4 var(--f-body);color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:12px 14px;min-height:50px;transition:border-color .15s,box-shadow .15s}
+textarea{min-height:100px;resize:vertical}
+select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:40px}
+input:hover,select:hover,textarea:hover{border-color:var(--ink-2)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--sun);box-shadow:0 0 0 3px rgba(233,130,85,.28)}
+[aria-invalid="true"]{border-color:var(--err)!important}
+.err{color:var(--err);font-size:13px;font-weight:600}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.checks{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.checks label{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border:1.5px solid var(--line);border-radius:999px;background:var(--card);font-weight:500;font-size:14px;cursor:pointer;transition:border-color .15s,background .15s}
+.checks input{width:16px;height:16px;accent-color:var(--sun);margin:0}
+.checks label:has(input:checked){border-color:var(--sun);background:var(--paper)}
+.checks label:has(input:focus-visible){outline:3px solid var(--sun);outline-offset:2px}
+.checks.invalid label{border-color:var(--err)}
+.esum{background:var(--err-bg);border:1.5px solid var(--err);border-radius:var(--r);padding:14px 16px;color:var(--ink)}
+.esum h3{font-family:var(--f-body);font-size:15px;font-weight:700;color:var(--err);margin-bottom:4px;letter-spacing:0}
+.esum ul{margin:0;padding-left:18px;font-size:14px}
+.esum a{color:var(--err);font-weight:600}
+.prefilled{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--sun);border-radius:var(--r);padding:10px 14px;font-size:14px;font-weight:600}
+.submit-row{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
+.btn[disabled]{opacity:.7;cursor:progress}
+.spin{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.success{display:grid;gap:18px;animation:resIn .6s cubic-bezier(.2,.7,.2,1) both}
+.success .seal{width:72px;height:72px;border-radius:50%;background:var(--ok-bg);color:var(--ok);display:grid;place-items:center;animation:pop .6s cubic-bezier(.3,1.8,.5,1) .2s both}
+.success h3{font-size:clamp(34px,4vw,46px)}
+.summary{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:15px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin:0}
+.summary dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);padding-top:3px}
+.summary dd{margin:0;font-weight:600;min-width:0;overflow-wrap:anywhere}
+.notice{font-size:12px;font-family:var(--f-mono);color:var(--ink-2);letter-spacing:.06em;text-transform:uppercase}
+
+/* FAQ */
+.faq-grid{display:grid;gap:32px}
+@media (min-width:960px){.faq-grid{grid-template-columns:.8fr 1.2fr;gap:72px}}
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:first-child{border-top:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0;font-weight:700;font-size:18px;line-height:1.35;transition:color .2s,padding .3s ease}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--sun-ink);padding-left:6px}
+.faq .pm{flex:none;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;position:relative;transition:transform .35s ease,background .2s}
+.faq .pm::before,.faq .pm::after{content:"";position:absolute;width:12px;height:1.5px;background:currentColor;transition:transform .35s ease}
+.faq .pm::after{transform:rotate(90deg)}
+.faq details[open] .pm{background:var(--sun);border-color:var(--sun);color:var(--on-sun);transform:rotate(180deg)}
+.faq details[open] .pm::after{transform:rotate(0)}
+.faq .ans{padding:0 48px 24px 0;color:var(--ink-2);max-width:62ch}
+.faq details[open] .ans{animation:fade .4s ease both}
+@keyframes fade{from{opacity:.001;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* Final CTA */
+.final{position:relative;isolation:isolate;color:var(--on-image);overflow:hidden;background:#111}
+.final .bgw{position:absolute;inset:0;z-index:-2;will-change:transform}
+.final .bgw picture,.final .bgw img{display:block;width:100%;height:100%;object-fit:cover}
+.final::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(12,12,12,.85) 0%,rgba(12,12,12,.5) 55%,rgba(12,12,12,.15) 100%)}
+.final .wrap{padding-block:clamp(120px,18vw,220px)}
+.final h2{font-size:clamp(46px,8vw,112px);max-width:13ch}
+.final .btn{margin-top:36px;--h:56px;padding:0 28px;font-size:16px}
+
+/* Footer */
+.foot{background:var(--band);color:var(--on-band);padding-block:64px 28px}
+.foot .logo{color:var(--on-band)}
+.fgrid{display:grid;gap:32px}
+@media (min-width:860px){.fgrid{grid-template-columns:1.4fr 1fr 1fr 1fr}}
+.foot h3{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--on-band-2);margin-bottom:12px}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.foot a{text-decoration:none;color:var(--on-band)}
+.foot a:hover{color:var(--sun);text-decoration:underline;text-underline-offset:3px}
+.ph-text{font-family:var(--f-mono);font-size:13px;color:var(--on-band-2)}
+.tagline{font-family:var(--f-display);font-style:italic;font-size:24px;color:var(--on-band);margin-top:12px}
+.disclaimer{margin-top:48px;padding-top:20px;border-top:1px solid var(--band-line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-size:13px;color:var(--on-band-2)}
+.disclaimer nav{display:flex;gap:18px;flex-wrap:wrap}
+
+/* Dialog */
+dialog.dest{border:0;padding:0;width:min(760px,calc(100% - 32px));max-height:calc(100% - 48px);border-radius:12px;background:var(--paper-2);color:var(--ink);overflow:auto}
+dialog.dest::backdrop{background:rgba(0,0,0,.6)}
+dialog.dest[open]{animation:pop .45s cubic-bezier(.2,.7,.2,1) both}
+@keyframes pop{from{transform:translateY(24px) scale(.96);opacity:.001}to{transform:none;opacity:1}}
+.dlg-ph{position:relative;aspect-ratio:16/8;max-width:100%;overflow:hidden}
+.dlg-ph img{width:100%;height:100%;object-fit:cover;animation:settle 1.4s cubic-bezier(.2,.7,.2,1) both}
+.dlg-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(12,12,12,.78))}
+.dlg-ph .cap{position:absolute;left:24px;bottom:18px;right:70px;z-index:1;color:var(--on-image)}
+.dlg-ph h2{font-size:clamp(42px,7vw,64px)}
+.dlg-close{position:absolute;right:14px;top:14px;z-index:2;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,248,238,.92);color:#252825;cursor:pointer;display:grid;place-items:center}
+.dlg-b{padding:24px clamp(20px,4vw,32px) 28px;display:grid;gap:20px}
+.dlg-cols{display:grid;gap:20px}
+@media (min-width:620px){.dlg-cols{grid-template-columns:1.3fr 1fr}}
+.dlg-b h3{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--ink-2);margin-bottom:8px}
+.dlg-b ul{margin:0;padding-left:18px;display:grid;gap:6px}
+.dlg-facts{display:grid;gap:10px;margin:0}
+.dlg-facts div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.dlg-facts dt{color:var(--ink-2);font-size:14px}
+.dlg-facts dd{margin:0;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.dlg-act{display:flex;flex-wrap:wrap;gap:10px}
+</style>
+
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<a class="sr" href="#main">Skip to content</a>
+
+<header class="navshell" id="navshell">
+  <nav class="pill" aria-label="Primary">
+    <a class="logo" href="#top" aria-label="Roamly, back to top">roamly<i aria-hidden="true"></i></a>
+    <ul class="links" id="links">
+      <li><a href="#destinations">Destinations</a></li>
+      <li><a href="#experiences">Experiences</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#about">About</a></li>
+      <span class="blob" aria-hidden="true"></span><span class="dot" aria-hidden="true"></span>
+    </ul>
+    <button class="menubtn" id="burger" type="button" aria-controls="mnav" aria-expanded="false"><span class="bars" aria-hidden="true"></span><span id="menuLabel">Menu</span></button>
+    <a class="btn btn-sun cta" href="#enquire" data-plan><span class="full">Plan My Trip</span><span class="short">Plan</span></a>
+  </nav>
+</header>
+<nav class="mnav" id="mnav" aria-label="Mobile">
+  <a class="m" href="#destinations">Destinations <small>04</small></a>
+  <a class="m" href="#experiences">Experiences <small>5 days</small></a>
+  <a class="m" href="#how">How It Works <small>3 steps</small></a>
+  <a class="m" href="#about">About <small>Roamly</small></a>
+  <div class="thumbs" aria-hidden="true"><img src="img/cape.webp" alt=""><img src="img/marrakech.webp" alt=""><img src="img/bali.webp" alt=""><img src="img/zanzibar.webp" alt=""></div>
+  <a class="btn btn-sun" href="#enquire" data-plan>Plan My Trip <span class="arr" aria-hidden="true">→</span></a>
+</nav>
+<div class="cur" id="cur" aria-hidden="true"><span id="curTxt">View</span></div>
+
+<main id="main">
+<section class="hero" id="top" aria-labelledby="hero-h">
+  <div class="stage" id="stage">
+    <picture class="poster-pic">
+      <source media="(max-width: 700px)" srcset="img/hero-poster-sm.webp">
+      <img class="poster" src="img/hero-poster.webp" alt="" width="1600" height="900">
+    </picture>
+    <video id="heroVid" muted loop playsinline autoplay preload="auto" poster="img/hero-poster.webp" aria-label="Film of Cape Town, Marrakech, Bali and Zanzibar">
+      <source src="img/hero.mp4" type="video/mp4">
+    </video>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="hero-copy" id="heroCopy">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow" data-fade>Curated trips · 04 destinations</p>
+          <h1 id="hero-h" data-split><span class="l1">Your next favorite memory</span><br> <em>starts here.</em></h1>
+          <p class="sub" data-fade>Curated trips with the price and plan upfront. You just pack.</p>
+          <div class="ctas" data-fade>
+            <a class="btn btn-sun" href="#destinations">Explore Trips <span class="arr" aria-hidden="true">→</span></a>
+            <a class="btn btn-ghost" href="#enquire" data-plan>Plan My Trip</a>
+          </div>
+        </div>
+        <div class="hero-foot" data-fade>
+          <ul class="trust" aria-label="Roamly promises">
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#E98255" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Prices upfront</li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#E98255" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Free to enquire</li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#E98255" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Planned by people</li>
+          </ul>
+          <div class="reel">
+            <p class="chapter" aria-live="off"><svg class="ring" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="13" stroke="rgba(255,248,238,.25)"/><circle id="ringFill" cx="15" cy="15" r="13" stroke="#E98255" stroke-dasharray="81.7" stroke-dashoffset="81.7"/></svg><span>Now showing</span><b id="chapName">Cape Town</b><span id="chapCoord">33.9°S</span></p>
+            <button class="vidbtn" id="vidBtn" type="button" aria-label="Pause background film"><svg id="vidIco" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2" y="1" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="8.5" y="1" width="3.5" height="12" rx="1" fill="currentColor"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cutout" aria-hidden="true">
+      <svg id="cutSvg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet">
+        <defs><mask id="roamMask" maskUnits="userSpaceOnUse" x="-20000" y="-20000" width="41600" height="40900">
+          <rect x="-20000" y="-20000" width="41600" height="40900" fill="#fff"/>
+          <text id="roamText" x="800" y="610" text-anchor="middle" font-family="DM Serif Display, Georgia, serif" font-size="560" letter-spacing="-18" fill="#000">roam</text>
+        </mask></defs>
+        <rect id="cutRect" x="-20000" y="-20000" width="41600" height="40900" fill="var(--paper)" mask="url(#roamMask)"/>
+      </svg>
+    </div>
+    <div class="intro-copy" id="introCopy" aria-hidden="true">
+      <div class="row"><p class="mono">Cape Town · Marrakech · Bali · Zanzibar</p><p class="mono">Est. concept · 2026</p></div>
+      <div class="row"><p class="big">Curated trips for people who'd rather <em>be there</em> than plan it.</p><span class="scrollcue"><i></i>Scroll to enter</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="row">
+  <span>Cape Town</span><em>33.9°S</em><span>Marrakech</span><em>31.6°N</em><span>Bali</span><em>8.5°S</em><span>Zanzibar</span><em>6.2°S</em>
+  <span>Cape Town</span><em>33.9°S</em><span>Marrakech</span><em>31.6°N</em><span>Bali</span><em>8.5°S</em><span>Zanzibar</span><em>6.2°S</em>
+</div></div>
+
+<section class="dest-sec" id="destinations" aria-labelledby="dest-h">
+  <div class="dest-pin" id="destPin">
+    <div class="wrap shead">
+      <div>
+        <p class="eyebrow">Destinations</p>
+        <h2 class="h2" id="dest-h" data-split style="margin-top:14px">Where will your story take you?</h2>
+      </div>
+      <p class="lede">Four places. Four moods.</p>
+    </div>
+    <div class="dtrack-wrap" id="dtrackWrap" tabindex="0" aria-label="Destination cards, scroll sideways">
+      <div class="dtrack" id="dtrack"></div>
+    </div>
+    <div class="dnote"><p class="fine">*Illustrative starting prices per person for a concept brand. Excludes flights; real prices vary by dates, availability and inclusions.</p></div>
+  </div>
+</section>
+
+<section class="sec band" id="experiences" aria-labelledby="feat-h">
+  <div class="wrap feat">
+    <div class="feat-img" id="featImg">
+      <picture>
+        <source media="(max-width: 700px)" srcset="img/featured-sm.webp">
+        <img src="img/featured.webp" alt="Aerial view of Cape Town with cloud spilling over Table Mountain and the Atlantic coastline" loading="lazy" width="1400" height="1050">
+      </picture>
+      <div class="stamp" aria-hidden="true"><div><b>5</b>days<br>4 nights</div></div>
+    </div>
+    <div>
+      <p class="eyebrow">Featured experience</p>
+      <h2 id="feat-h" data-split>The Cape Town Escape</h2>
+      <dl class="facts">
+        <div><dt>Duration</dt><dd>5D / 4N</dd></div>
+        <div><dt>From*</dt><dd>$650</dd></div>
+        <div><dt>Ideal for</dt><dd>Couples &amp; friends</dd></div>
+      </dl>
+      <div class="itin-wrap" style="position:relative">
+        <span class="rail" aria-hidden="true" style="position:absolute;left:19px;top:22px;bottom:22px;width:1.5px;background:var(--band-line)"><span class="fill" id="itinFill" style="position:absolute;inset:0;background:var(--sun);transform-origin:top"></span></span>
+        <ol class="itin" id="itin" aria-label="Day by day">
+          <li><span class="day">D1</span><div><h3>Arrive &amp; Unwind</h3><p>Check in, then a relaxed welcome evening.</p></div></li>
+          <li><span class="day">D2</span><div><h3>The City &amp; Its Stories</h3><p>Landmarks, neighbourhoods and local culture.</p></div></li>
+          <li><span class="day">D3</span><div><h3>Mountain &amp; Coast</h3><p>Viewpoints and coastline, weather permitting.</p></div></li>
+          <li><span class="day">D4</span><div><h3>Your Kind of Adventure</h3><p>Food tour, guided excursion, or a free day.</p></div></li>
+          <li><span class="day">D5</span><div><h3>One Last Morning</h3><p>Breakfast, free time, departure.</p></div></li>
+        </ol>
+      </div>
+      <div class="inex">
+        <div>
+          <h3>Included</h3>
+          <ul class="ticks">
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#E98255" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>4 nights' stay</li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#E98255" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Guided experiences</li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="#E98255" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Itinerary &amp; support</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Not included</h3>
+          <ul class="ticks">
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-opacity=".6" stroke-width="1.8" stroke-linecap="round"/></svg>International flights</li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-opacity=".6" stroke-width="1.8" stroke-linecap="round"/></svg>Optional Day 4 activities</li>
+            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-opacity=".6" stroke-width="1.8" stroke-linecap="round"/></svg>Insurance &amp; visas</li>
+          </ul>
+        </div>
+      </div>
+      <div class="feat-cta">
+        <button class="btn btn-sun" type="button" data-prefill="cape">Enquire About This Trip <span class="arr" aria-hidden="true">→</span></button>
+        <p class="fine">*Sample itinerary &amp; price. Not a live offer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="journey" id="journey" aria-labelledby="jr-h">
+  <div class="jr-stage" id="jrStage">
+    <div class="jr-head">
+      <p class="eyebrow">The Roamly route</p>
+      <h2 class="jr-title" id="jr-h" data-split>Four corners. <em>One planner.</em></h2>
+    </div>
+    <svg class="jr-map" id="jrMap" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g id="jrCam">
+        <path class="dots" d="M259.9 4.1h0M273.6 4.1h0M287.3 4.1h0M300.9 4.1h0M314.6 4.1h0M328.3 4.1h0M342 4.1h0M369.3 4.1h0M383 4.1h0M424.1 4.1h0M437.7 4.1h0M451.4 4.1h0M465.1 4.1h0M478.8 4.1h0M492.5 4.1h0M506.1 4.1h0M519.8 4.1h0M533.5 4.1h0M547.2 4.1h0M670.3 4.1h0M684 4.1h0M697.7 4.1h0M711.3 4.1h0M725 4.1h0M738.7 4.1h0M779.7 4.1h0M793.4 4.1h0M807.1 4.1h0M820.8 4.1h0M834.5 4.1h0M848.1 4.1h0M861.8 4.1h0M875.5 4.1h0M889.2 4.1h0M902.9 4.1h0M916.5 4.1h0M930.2 4.1h0M943.9 4.1h0M957.6 4.1h0M971.3 4.1h0M984.9 4.1h0M998.6 4.1h0M1012.3 4.1h0M1026 4.1h0M1039.7 4.1h0M1053.3 4.1h0M1067 4.1h0M1080.7 4.1h0M1094.4 4.1h0M1108.1 4.1h0M1121.7 4.1h0M1135.4 4.1h0M1149.1 4.1h0M1162.8 4.1h0M1176.5 4.1h0M1190.1 4.1h0M1203.8 4.1h0M1217.5 4.1h0M1231.2 4.1h0M1244.9 4.1h0M1258.5 4.1h0M1272.2 4.1h0M1285.9 4.1h0M1299.6 4.1h0M1313.3 4.1h0M1326.9 4.1h0M1340.6 4.1h0M1354.3 4.1h0M1368 4.1h0M1381.7 4.1h0M1395.3 4.1h0M1409 4.1h0M1422.7 4.1h0M1436.4 4.1h0M1450.1 4.1h0M1463.7 4.1h0M1477.4 4.1h0M1491.1 4.1h0M1504.8 4.1h0M1518.5 4.1h0M1532.1 4.1h0M1545.8 4.1h0M1559.5 4.1h0M1573.2 4.1h0M1586.9 4.1h0M1600.5 4.1h0M1614.2 4.1h0M177.8 17.8h0M191.5 17.8h0M205.2 17.8h0M218.9 17.8h0M232.5 17.8h0M246.2 17.8h0M259.9 17.8h0M273.6 17.8h0M287.3 17.8h0M355.7 17.8h0M383 17.8h0M396.7 17.8h0M451.4 17.8h0M465.1 17.8h0M478.8 17.8h0M492.5 17.8h0M506.1 17.8h0M519.8 17.8h0M533.5 17.8h0M684 17.8h0M697.7 17.8h0M711.3 17.8h0M725 17.8h0M738.7 17.8h0M807.1 17.8h0M820.8 17.8h0M834.5 17.8h0M848.1 17.8h0M861.8 17.8h0M875.5 17.8h0M889.2 17.8h0M902.9 17.8h0M916.5 17.8h0M930.2 17.8h0M943.9 17.8h0M957.6 17.8h0M971.3 17.8h0M984.9 17.8h0M998.6 17.8h0M1012.3 17.8h0M1026 17.8h0M1039.7 17.8h0M1053.3 17.8h0M1067 17.8h0M1080.7 17.8h0M1094.4 17.8h0M1108.1 17.8h0M1121.7 17.8h0M1135.4 17.8h0M1149.1 17.8h0M1162.8 17.8h0M1176.5 17.8h0M1190.1 17.8h0M1203.8 17.8h0M1217.5 17.8h0M1231.2 17.8h0M1244.9 17.8h0M1258.5 17.8h0M1272.2 17.8h0M1285.9 17.8h0M1299.6 17.8h0M1313.3 17.8h0M1326.9 17.8h0M1340.6 17.8h0M1354.3 17.8h0M1368 17.8h0M1381.7 17.8h0M1395.3 17.8h0M1409 17.8h0M1422.7 17.8h0M1436.4 17.8h0M1450.1 17.8h0M1463.7 17.8h0M1477.4 17.8h0M1491.1 17.8h0M1504.8 17.8h0M1518.5 17.8h0M1532.1 17.8h0M1545.8 17.8h0M1559.5 17.8h0M1573.2 17.8h0M1586.9 17.8h0M177.8 31.5h0M191.5 31.5h0M205.2 31.5h0M218.9 31.5h0M232.5 31.5h0M246.2 31.5h0M259.9 31.5h0M273.6 31.5h0M396.7 31.5h0M410.4 31.5h0M424.1 31.5h0M465.1 31.5h0M478.8 31.5h0M492.5 31.5h0M506.1 31.5h0M519.8 31.5h0M533.5 31.5h0M547.2 31.5h0M588.2 31.5h0M601.9 31.5h0M615.6 31.5h0M629.3 31.5h0M684 31.5h0M697.7 31.5h0M711.3 31.5h0M725 31.5h0M738.7 31.5h0M752.4 31.5h0M820.8 31.5h0M834.5 31.5h0M848.1 31.5h0M861.8 31.5h0M875.5 31.5h0M889.2 31.5h0M902.9 31.5h0M916.5 31.5h0M930.2 31.5h0M943.9 31.5h0M957.6 31.5h0M971.3 31.5h0M984.9 31.5h0M998.6 31.5h0M1012.3 31.5h0M1026 31.5h0M1039.7 31.5h0M1053.3 31.5h0M1067 31.5h0M1080.7 31.5h0M1094.4 31.5h0M1108.1 31.5h0M1121.7 31.5h0M1135.4 31.5h0M1149.1 31.5h0M1162.8 31.5h0M1176.5 31.5h0M1190.1 31.5h0M1203.8 31.5h0M1217.5 31.5h0M1231.2 31.5h0M1244.9 31.5h0M1258.5 31.5h0M1272.2 31.5h0M1285.9 31.5h0M1299.6 31.5h0M1313.3 31.5h0M1326.9 31.5h0M1340.6 31.5h0M1354.3 31.5h0M1368 31.5h0M1381.7 31.5h0M1395.3 31.5h0M1409 31.5h0M1422.7 31.5h0M1436.4 31.5h0M1450.1 31.5h0M1463.7 31.5h0M1477.4 31.5h0M1491.1 31.5h0M1504.8 31.5h0M1518.5 31.5h0M1532.1 31.5h0M1545.8 31.5h0M1559.5 31.5h0M1573.2 31.5h0M177.8 45.2h0M191.5 45.2h0M205.2 45.2h0M218.9 45.2h0M232.5 45.2h0M246.2 45.2h0M259.9 45.2h0M355.7 45.2h0M424.1 45.2h0M465.1 45.2h0M478.8 45.2h0M492.5 45.2h0M519.8 45.2h0M533.5 45.2h0M547.2 45.2h0M560.9 45.2h0M574.5 45.2h0M588.2 45.2h0M601.9 45.2h0M615.6 45.2h0M629.3 45.2h0M642.9 45.2h0M656.6 45.2h0M670.3 45.2h0M684 45.2h0M697.7 45.2h0M711.3 45.2h0M725 45.2h0M738.7 45.2h0M752.4 45.2h0M807.1 45.2h0M820.8 45.2h0M834.5 45.2h0M848.1 45.2h0M861.8 45.2h0M875.5 45.2h0M889.2 45.2h0M902.9 45.2h0M916.5 45.2h0M930.2 45.2h0M943.9 45.2h0M957.6 45.2h0M971.3 45.2h0M984.9 45.2h0M998.6 45.2h0M1012.3 45.2h0M1026 45.2h0M1039.7 45.2h0M1053.3 45.2h0M1067 45.2h0M1080.7 45.2h0M1094.4 45.2h0M1108.1 45.2h0M1121.7 45.2h0M1135.4 45.2h0M1149.1 45.2h0M1162.8 45.2h0M1176.5 45.2h0M1190.1 45.2h0M1203.8 45.2h0M1217.5 45.2h0M1231.2 45.2h0M1244.9 45.2h0M1258.5 45.2h0M1272.2 45.2h0M1285.9 45.2h0M1299.6 45.2h0M1313.3 45.2h0M1326.9 45.2h0M1340.6 45.2h0M1354.3 45.2h0M1368 45.2h0M1381.7 45.2h0M1395.3 45.2h0M1409 45.2h0M1422.7 45.2h0M1436.4 45.2h0M1450.1 45.2h0M1463.7 45.2h0M1504.8 45.2h0M1518.5 45.2h0M1532.1 45.2h0M1545.8 45.2h0M177.8 58.9h0M191.5 58.9h0M205.2 58.9h0M218.9 58.9h0M232.5 58.9h0M246.2 58.9h0M259.9 58.9h0M424.1 58.9h0M478.8 58.9h0M492.5 58.9h0M506.1 58.9h0M547.2 58.9h0M560.9 58.9h0M574.5 58.9h0M588.2 58.9h0M601.9 58.9h0M615.6 58.9h0M629.3 58.9h0M642.9 58.9h0M656.6 58.9h0M670.3 58.9h0M684 58.9h0M697.7 58.9h0M711.3 58.9h0M725 58.9h0M738.7 58.9h0M752.4 58.9h0M820.8 58.9h0M834.5 58.9h0M848.1 58.9h0M861.8 58.9h0M875.5 58.9h0M889.2 58.9h0M902.9 58.9h0M916.5 58.9h0M930.2 58.9h0M943.9 58.9h0M957.6 58.9h0M971.3 58.9h0M984.9 58.9h0M998.6 58.9h0M1012.3 58.9h0M1026 58.9h0M1039.7 58.9h0M1053.3 58.9h0M1067 58.9h0M1080.7 58.9h0M1094.4 58.9h0M1108.1 58.9h0M1121.7 58.9h0M1135.4 58.9h0M1149.1 58.9h0M1162.8 58.9h0M1176.5 58.9h0M1190.1 58.9h0M1203.8 58.9h0M1217.5 58.9h0M1231.2 58.9h0M1244.9 58.9h0M1258.5 58.9h0M1272.2 58.9h0M1285.9 58.9h0M1299.6 58.9h0M1313.3 58.9h0M1326.9 58.9h0M1340.6 58.9h0M1354.3 58.9h0M1368 58.9h0M1381.7 58.9h0M1395.3 58.9h0M1409 58.9h0M1422.7 58.9h0M1436.4 58.9h0M1450.1 58.9h0M1532.1 58.9h0M1545.8 58.9h0M1559.5 58.9h0M177.8 72.5h0M191.5 72.5h0M205.2 72.5h0M218.9 72.5h0M232.5 72.5h0M410.4 72.5h0M492.5 72.5h0M547.2 72.5h0M560.9 72.5h0M574.5 72.5h0M588.2 72.5h0M601.9 72.5h0M615.6 72.5h0M629.3 72.5h0M642.9 72.5h0M656.6 72.5h0M670.3 72.5h0M684 72.5h0M697.7 72.5h0M711.3 72.5h0M725 72.5h0M738.7 72.5h0M752.4 72.5h0M766.1 72.5h0M820.8 72.5h0M834.5 72.5h0M848.1 72.5h0M861.8 72.5h0M875.5 72.5h0M889.2 72.5h0M902.9 72.5h0M916.5 72.5h0M930.2 72.5h0M943.9 72.5h0M957.6 72.5h0M971.3 72.5h0M984.9 72.5h0M998.6 72.5h0M1012.3 72.5h0M1026 72.5h0M1039.7 72.5h0M1053.3 72.5h0M1067 72.5h0M1080.7 72.5h0M1094.4 72.5h0M1108.1 72.5h0M1121.7 72.5h0M1135.4 72.5h0M1149.1 72.5h0M1162.8 72.5h0M1176.5 72.5h0M1190.1 72.5h0M1203.8 72.5h0M1217.5 72.5h0M1231.2 72.5h0M1244.9 72.5h0M1258.5 72.5h0M1272.2 72.5h0M1285.9 72.5h0M1299.6 72.5h0M1313.3 72.5h0M1326.9 72.5h0M1340.6 72.5h0M1354.3 72.5h0M1368 72.5h0M1381.7 72.5h0M1395.3 72.5h0M1409 72.5h0M1422.7 72.5h0M1436.4 72.5h0M1450.1 72.5h0M1463.7 72.5h0M1491.1 72.5h0M1504.8 72.5h0M1559.5 72.5h0M1573.2 72.5h0M273.6 86.2h0M287.3 86.2h0M300.9 86.2h0M314.6 86.2h0M328.3 86.2h0M342 86.2h0M355.7 86.2h0M369.3 86.2h0M629.3 86.2h0M642.9 86.2h0M656.6 86.2h0M670.3 86.2h0M684 86.2h0M697.7 86.2h0M711.3 86.2h0M725 86.2h0M738.7 86.2h0M752.4 86.2h0M766.1 86.2h0M779.7 86.2h0M793.4 86.2h0M807.1 86.2h0M820.8 86.2h0M834.5 86.2h0M848.1 86.2h0M861.8 86.2h0M875.5 86.2h0M889.2 86.2h0M902.9 86.2h0M916.5 86.2h0M930.2 86.2h0M943.9 86.2h0M957.6 86.2h0M971.3 86.2h0M984.9 86.2h0M998.6 86.2h0M1012.3 86.2h0M1026 86.2h0M1039.7 86.2h0M1053.3 86.2h0M1067 86.2h0M1080.7 86.2h0M1094.4 86.2h0M1108.1 86.2h0M1121.7 86.2h0M1135.4 86.2h0M1149.1 86.2h0M1162.8 86.2h0M1176.5 86.2h0M1190.1 86.2h0M1203.8 86.2h0M1217.5 86.2h0M1231.2 86.2h0M1244.9 86.2h0M1258.5 86.2h0M1272.2 86.2h0M1285.9 86.2h0M1299.6 86.2h0M1313.3 86.2h0M1326.9 86.2h0M1340.6 86.2h0M1354.3 86.2h0M1368 86.2h0M1381.7 86.2h0M1395.3 86.2h0M1409 86.2h0M1422.7 86.2h0M1436.4 86.2h0M1450.1 86.2h0M1463.7 86.2h0M1477.4 86.2h0M1559.5 86.2h0M1573.2 86.2h0M205.2 99.9h0M218.9 99.9h0M232.5 99.9h0M246.2 99.9h0M259.9 99.9h0M273.6 99.9h0M287.3 99.9h0M300.9 99.9h0M314.6 99.9h0M328.3 99.9h0M342 99.9h0M355.7 99.9h0M369.3 99.9h0M629.3 99.9h0M642.9 99.9h0M656.6 99.9h0M670.3 99.9h0M684 99.9h0M697.7 99.9h0M711.3 99.9h0M725 99.9h0M738.7 99.9h0M752.4 99.9h0M766.1 99.9h0M779.7 99.9h0M793.4 99.9h0M807.1 99.9h0M820.8 99.9h0M834.5 99.9h0M848.1 99.9h0M861.8 99.9h0M875.5 99.9h0M889.2 99.9h0M902.9 99.9h0M916.5 99.9h0M930.2 99.9h0M943.9 99.9h0M957.6 99.9h0M971.3 99.9h0M984.9 99.9h0M998.6 99.9h0M1012.3 99.9h0M1026 99.9h0M1039.7 99.9h0M1053.3 99.9h0M1067 99.9h0M1080.7 99.9h0M1094.4 99.9h0M1108.1 99.9h0M1121.7 99.9h0M1135.4 99.9h0M1149.1 99.9h0M1162.8 99.9h0M1176.5 99.9h0M1190.1 99.9h0M1203.8 99.9h0M1217.5 99.9h0M1231.2 99.9h0M1244.9 99.9h0M1258.5 99.9h0M1272.2 99.9h0M1285.9 99.9h0M1299.6 99.9h0M1313.3 99.9h0M1326.9 99.9h0M1340.6 99.9h0M1354.3 99.9h0M1368 99.9h0M1381.7 99.9h0M1395.3 99.9h0M1409 99.9h0M1422.7 99.9h0M1436.4 99.9h0M1450.1 99.9h0M1463.7 99.9h0M1545.8 99.9h0M1600.5 99.9h0M1614.2 99.9h0M177.8 113.6h0M191.5 113.6h0M205.2 113.6h0M218.9 113.6h0M232.5 113.6h0M246.2 113.6h0M259.9 113.6h0M273.6 113.6h0M287.3 113.6h0M300.9 113.6h0M314.6 113.6h0M328.3 113.6h0M342 113.6h0M355.7 113.6h0M369.3 113.6h0M629.3 113.6h0M642.9 113.6h0M656.6 113.6h0M670.3 113.6h0M684 113.6h0M697.7 113.6h0M711.3 113.6h0M725 113.6h0M738.7 113.6h0M752.4 113.6h0M766.1 113.6h0M779.7 113.6h0M793.4 113.6h0M807.1 113.6h0M820.8 113.6h0M834.5 113.6h0M848.1 113.6h0M861.8 113.6h0M875.5 113.6h0M889.2 113.6h0M902.9 113.6h0M916.5 113.6h0M930.2 113.6h0M943.9 113.6h0M957.6 113.6h0M971.3 113.6h0M984.9 113.6h0M998.6 113.6h0M1012.3 113.6h0M1026 113.6h0M1039.7 113.6h0M1053.3 113.6h0M1067 113.6h0M1080.7 113.6h0M1094.4 113.6h0M1108.1 113.6h0M1121.7 113.6h0M1135.4 113.6h0M1149.1 113.6h0M1162.8 113.6h0M1176.5 113.6h0M1190.1 113.6h0M1203.8 113.6h0M1217.5 113.6h0M1231.2 113.6h0M1244.9 113.6h0M1258.5 113.6h0M1272.2 113.6h0M1285.9 113.6h0M1299.6 113.6h0M1313.3 113.6h0M1326.9 113.6h0M1340.6 113.6h0M1354.3 113.6h0M1368 113.6h0M1381.7 113.6h0M1395.3 113.6h0M1409 113.6h0M1422.7 113.6h0M1436.4 113.6h0M1450.1 113.6h0M1463.7 113.6h0M1477.4 113.6h0M1586.9 113.6h0M177.8 127.3h0M191.5 127.3h0M205.2 127.3h0M218.9 127.3h0M232.5 127.3h0M246.2 127.3h0M259.9 127.3h0M273.6 127.3h0M287.3 127.3h0M300.9 127.3h0M314.6 127.3h0M328.3 127.3h0M342 127.3h0M355.7 127.3h0M369.3 127.3h0M383 127.3h0M396.7 127.3h0M410.4 127.3h0M465.1 127.3h0M478.8 127.3h0M492.5 127.3h0M506.1 127.3h0M615.6 127.3h0M629.3 127.3h0M642.9 127.3h0M656.6 127.3h0M670.3 127.3h0M684 127.3h0M697.7 127.3h0M711.3 127.3h0M725 127.3h0M738.7 127.3h0M752.4 127.3h0M766.1 127.3h0M779.7 127.3h0M793.4 127.3h0M807.1 127.3h0M820.8 127.3h0M834.5 127.3h0M848.1 127.3h0M861.8 127.3h0M875.5 127.3h0M889.2 127.3h0M902.9 127.3h0M916.5 127.3h0M930.2 127.3h0M943.9 127.3h0M957.6 127.3h0M971.3 127.3h0M984.9 127.3h0M998.6 127.3h0M1012.3 127.3h0M1026 127.3h0M1039.7 127.3h0M1053.3 127.3h0M1067 127.3h0M1080.7 127.3h0M1094.4 127.3h0M1108.1 127.3h0M1121.7 127.3h0M1135.4 127.3h0M1149.1 127.3h0M1162.8 127.3h0M1176.5 127.3h0M1190.1 127.3h0M1203.8 127.3h0M1217.5 127.3h0M1231.2 127.3h0M1244.9 127.3h0M1258.5 127.3h0M1272.2 127.3h0M1285.9 127.3h0M1299.6 127.3h0M1313.3 127.3h0M1326.9 127.3h0M1340.6 127.3h0M1354.3 127.3h0M1368 127.3h0M1381.7 127.3h0M1395.3 127.3h0M1409 127.3h0M1422.7 127.3h0M1436.4 127.3h0M1450.1 127.3h0M1463.7 127.3h0M1477.4 127.3h0M1586.9 127.3h0M177.8 140.9h0M191.5 140.9h0M205.2 140.9h0M218.9 140.9h0M232.5 140.9h0M246.2 140.9h0M259.9 140.9h0M273.6 140.9h0M287.3 140.9h0M300.9 140.9h0M314.6 140.9h0M328.3 140.9h0M342 140.9h0M355.7 140.9h0M369.3 140.9h0M383 140.9h0M396.7 140.9h0M410.4 140.9h0M424.1 140.9h0M437.7 140.9h0M465.1 140.9h0M478.8 140.9h0M492.5 140.9h0M506.1 140.9h0M519.8 140.9h0M533.5 140.9h0M547.2 140.9h0M560.9 140.9h0M574.5 140.9h0M588.2 140.9h0M601.9 140.9h0M615.6 140.9h0M629.3 140.9h0M642.9 140.9h0M656.6 140.9h0M670.3 140.9h0M684 140.9h0M697.7 140.9h0M711.3 140.9h0M725 140.9h0M738.7 140.9h0M752.4 140.9h0M766.1 140.9h0M779.7 140.9h0M793.4 140.9h0M807.1 140.9h0M820.8 140.9h0M834.5 140.9h0M848.1 140.9h0M861.8 140.9h0M875.5 140.9h0M889.2 140.9h0M902.9 140.9h0M916.5 140.9h0M930.2 140.9h0M943.9 140.9h0M957.6 140.9h0M971.3 140.9h0M984.9 140.9h0M998.6 140.9h0M1012.3 140.9h0M1026 140.9h0M1039.7 140.9h0M1053.3 140.9h0M1067 140.9h0M1080.7 140.9h0M1094.4 140.9h0M1108.1 140.9h0M1121.7 140.9h0M1135.4 140.9h0M1149.1 140.9h0M1162.8 140.9h0M1176.5 140.9h0M1190.1 140.9h0M1203.8 140.9h0M1217.5 140.9h0M1231.2 140.9h0M1244.9 140.9h0M1258.5 140.9h0M1272.2 140.9h0M1285.9 140.9h0M1299.6 140.9h0M1313.3 140.9h0M1326.9 140.9h0M1340.6 140.9h0M1354.3 140.9h0M1368 140.9h0M1381.7 140.9h0M1395.3 140.9h0M1409 140.9h0M1422.7 140.9h0M1436.4 140.9h0M1450.1 140.9h0M1463.7 140.9h0M1477.4 140.9h0M164.1 154.6h0M177.8 154.6h0M191.5 154.6h0M205.2 154.6h0M218.9 154.6h0M232.5 154.6h0M246.2 154.6h0M259.9 154.6h0M273.6 154.6h0M287.3 154.6h0M300.9 154.6h0M314.6 154.6h0M328.3 154.6h0M342 154.6h0M355.7 154.6h0M369.3 154.6h0M383 154.6h0M396.7 154.6h0M410.4 154.6h0M424.1 154.6h0M437.7 154.6h0M451.4 154.6h0M465.1 154.6h0M478.8 154.6h0M492.5 154.6h0M506.1 154.6h0M519.8 154.6h0M533.5 154.6h0M547.2 154.6h0M560.9 154.6h0M574.5 154.6h0M588.2 154.6h0M601.9 154.6h0M629.3 154.6h0M642.9 154.6h0M656.6 154.6h0M670.3 154.6h0M684 154.6h0M697.7 154.6h0M711.3 154.6h0M725 154.6h0M738.7 154.6h0M779.7 154.6h0M793.4 154.6h0M807.1 154.6h0M820.8 154.6h0M834.5 154.6h0M848.1 154.6h0M861.8 154.6h0M875.5 154.6h0M889.2 154.6h0M902.9 154.6h0M916.5 154.6h0M930.2 154.6h0M943.9 154.6h0M957.6 154.6h0M971.3 154.6h0M984.9 154.6h0M998.6 154.6h0M1012.3 154.6h0M1026 154.6h0M1039.7 154.6h0M1053.3 154.6h0M1067 154.6h0M1080.7 154.6h0M1094.4 154.6h0M1108.1 154.6h0M1121.7 154.6h0M1135.4 154.6h0M1149.1 154.6h0M1162.8 154.6h0M1176.5 154.6h0M1190.1 154.6h0M1203.8 154.6h0M1217.5 154.6h0M1231.2 154.6h0M1244.9 154.6h0M1258.5 154.6h0M1272.2 154.6h0M1285.9 154.6h0M1299.6 154.6h0M1313.3 154.6h0M1326.9 154.6h0M1340.6 154.6h0M1354.3 154.6h0M1368 154.6h0M1381.7 154.6h0M1395.3 154.6h0M1409 154.6h0M1422.7 154.6h0M1436.4 154.6h0M1450.1 154.6h0M1463.7 154.6h0M1477.4 154.6h0M1491.1 154.6h0M136.8 168.3h0M150.5 168.3h0M164.1 168.3h0M177.8 168.3h0M191.5 168.3h0M205.2 168.3h0M218.9 168.3h0M232.5 168.3h0M246.2 168.3h0M259.9 168.3h0M273.6 168.3h0M287.3 168.3h0M300.9 168.3h0M314.6 168.3h0M328.3 168.3h0M342 168.3h0M355.7 168.3h0M369.3 168.3h0M383 168.3h0M396.7 168.3h0M410.4 168.3h0M424.1 168.3h0M437.7 168.3h0M451.4 168.3h0M465.1 168.3h0M478.8 168.3h0M492.5 168.3h0M506.1 168.3h0M519.8 168.3h0M533.5 168.3h0M547.2 168.3h0M560.9 168.3h0M574.5 168.3h0M588.2 168.3h0M601.9 168.3h0M629.3 168.3h0M642.9 168.3h0M656.6 168.3h0M670.3 168.3h0M684 168.3h0M697.7 168.3h0M711.3 168.3h0M725 168.3h0M738.7 168.3h0M752.4 168.3h0M793.4 168.3h0M807.1 168.3h0M820.8 168.3h0M834.5 168.3h0M848.1 168.3h0M861.8 168.3h0M875.5 168.3h0M889.2 168.3h0M902.9 168.3h0M916.5 168.3h0M930.2 168.3h0M943.9 168.3h0M957.6 168.3h0M971.3 168.3h0M984.9 168.3h0M998.6 168.3h0M1012.3 168.3h0M1026 168.3h0M1039.7 168.3h0M1053.3 168.3h0M1067 168.3h0M1080.7 168.3h0M1094.4 168.3h0M1108.1 168.3h0M1121.7 168.3h0M1135.4 168.3h0M1149.1 168.3h0M1162.8 168.3h0M1176.5 168.3h0M1190.1 168.3h0M1203.8 168.3h0M1217.5 168.3h0M1231.2 168.3h0M1244.9 168.3h0M1258.5 168.3h0M1272.2 168.3h0M1285.9 168.3h0M1299.6 168.3h0M1313.3 168.3h0M1326.9 168.3h0M1340.6 168.3h0M1354.3 168.3h0M1368 168.3h0M1381.7 168.3h0M1395.3 168.3h0M1409 168.3h0M1422.7 168.3h0M1436.4 168.3h0M1450.1 168.3h0M1463.7 168.3h0M1477.4 168.3h0M123.1 182h0M136.8 182h0M150.5 182h0M164.1 182h0M177.8 182h0M191.5 182h0M205.2 182h0M218.9 182h0M232.5 182h0M246.2 182h0M259.9 182h0M273.6 182h0M287.3 182h0M300.9 182h0M314.6 182h0M328.3 182h0M342 182h0M355.7 182h0M369.3 182h0M383 182h0M396.7 182h0M410.4 182h0M424.1 182h0M437.7 182h0M451.4 182h0M465.1 182h0M478.8 182h0M492.5 182h0M506.1 182h0M519.8 182h0M533.5 182h0M547.2 182h0M560.9 182h0M574.5 182h0M588.2 182h0M601.9 182h0M642.9 182h0M656.6 182h0M670.3 182h0M684 182h0M697.7 182h0M711.3 182h0M725 182h0M738.7 182h0M752.4 182h0M766.1 182h0M848.1 182h0M861.8 182h0M875.5 182h0M889.2 182h0M902.9 182h0M916.5 182h0M930.2 182h0M943.9 182h0M957.6 182h0M971.3 182h0M984.9 182h0M998.6 182h0M1012.3 182h0M1026 182h0M1039.7 182h0M1053.3 182h0M1067 182h0M1080.7 182h0M1094.4 182h0M1108.1 182h0M1121.7 182h0M1135.4 182h0M1149.1 182h0M1162.8 182h0M1176.5 182h0M1190.1 182h0M1203.8 182h0M1217.5 182h0M1231.2 182h0M1244.9 182h0M1258.5 182h0M1272.2 182h0M1285.9 182h0M1299.6 182h0M1313.3 182h0M1326.9 182h0M1340.6 182h0M1354.3 182h0M1368 182h0M1381.7 182h0M1395.3 182h0M1409 182h0M1422.7 182h0M1436.4 182h0M1450.1 182h0M1463.7 182h0M123.1 195.7h0M136.8 195.7h0M150.5 195.7h0M164.1 195.7h0M177.8 195.7h0M191.5 195.7h0M205.2 195.7h0M218.9 195.7h0M232.5 195.7h0M246.2 195.7h0M259.9 195.7h0M273.6 195.7h0M287.3 195.7h0M300.9 195.7h0M314.6 195.7h0M328.3 195.7h0M342 195.7h0M355.7 195.7h0M369.3 195.7h0M383 195.7h0M396.7 195.7h0M410.4 195.7h0M424.1 195.7h0M437.7 195.7h0M451.4 195.7h0M465.1 195.7h0M478.8 195.7h0M492.5 195.7h0M506.1 195.7h0M519.8 195.7h0M533.5 195.7h0M547.2 195.7h0M560.9 195.7h0M574.5 195.7h0M588.2 195.7h0M601.9 195.7h0M615.6 195.7h0M642.9 195.7h0M656.6 195.7h0M670.3 195.7h0M684 195.7h0M697.7 195.7h0M711.3 195.7h0M725 195.7h0M738.7 195.7h0M752.4 195.7h0M766.1 195.7h0M779.7 195.7h0M943.9 195.7h0M957.6 195.7h0M971.3 195.7h0M984.9 195.7h0M998.6 195.7h0M1012.3 195.7h0M1026 195.7h0M1039.7 195.7h0M1053.3 195.7h0M1067 195.7h0M1080.7 195.7h0M1094.4 195.7h0M1108.1 195.7h0M1121.7 195.7h0M1135.4 195.7h0M1149.1 195.7h0M1162.8 195.7h0M1176.5 195.7h0M1190.1 195.7h0M1203.8 195.7h0M1217.5 195.7h0M1231.2 195.7h0M1244.9 195.7h0M1258.5 195.7h0M1272.2 195.7h0M1285.9 195.7h0M1299.6 195.7h0M1313.3 195.7h0M1326.9 195.7h0M1340.6 195.7h0M1354.3 195.7h0M1368 195.7h0M1381.7 195.7h0M1395.3 195.7h0M1409 195.7h0M1422.7 195.7h0M1436.4 195.7h0M1450.1 195.7h0M1463.7 195.7h0M1491.1 195.7h0M109.4 209.3h0M123.1 209.3h0M136.8 209.3h0M150.5 209.3h0M164.1 209.3h0M177.8 209.3h0M191.5 209.3h0M205.2 209.3h0M218.9 209.3h0M232.5 209.3h0M246.2 209.3h0M259.9 209.3h0M273.6 209.3h0M287.3 209.3h0M300.9 209.3h0M314.6 209.3h0M328.3 209.3h0M342 209.3h0M355.7 209.3h0M369.3 209.3h0M383 209.3h0M396.7 209.3h0M410.4 209.3h0M424.1 209.3h0M437.7 209.3h0M451.4 209.3h0M465.1 209.3h0M478.8 209.3h0M492.5 209.3h0M506.1 209.3h0M519.8 209.3h0M533.5 209.3h0M547.2 209.3h0M560.9 209.3h0M574.5 209.3h0M588.2 209.3h0M601.9 209.3h0M615.6 209.3h0M656.6 209.3h0M670.3 209.3h0M684 209.3h0M697.7 209.3h0M711.3 209.3h0M725 209.3h0M738.7 209.3h0M752.4 209.3h0M766.1 209.3h0M779.7 209.3h0M793.4 209.3h0M807.1 209.3h0M820.8 209.3h0M834.5 209.3h0M848.1 209.3h0M971.3 209.3h0M984.9 209.3h0M998.6 209.3h0M1012.3 209.3h0M1026 209.3h0M1039.7 209.3h0M1053.3 209.3h0M1067 209.3h0M1080.7 209.3h0M1094.4 209.3h0M1108.1 209.3h0M1121.7 209.3h0M1135.4 209.3h0M1149.1 209.3h0M1162.8 209.3h0M1176.5 209.3h0M1190.1 209.3h0M1203.8 209.3h0M1217.5 209.3h0M1231.2 209.3h0M1244.9 209.3h0M1258.5 209.3h0M1272.2 209.3h0M1285.9 209.3h0M1299.6 209.3h0M1313.3 209.3h0M1326.9 209.3h0M1340.6 209.3h0M1354.3 209.3h0M1368 209.3h0M1381.7 209.3h0M1395.3 209.3h0M1409 209.3h0M1422.7 209.3h0M1436.4 209.3h0M1450.1 209.3h0M1491.1 209.3h0M109.4 223h0M123.1 223h0M136.8 223h0M150.5 223h0M164.1 223h0M177.8 223h0M191.5 223h0M205.2 223h0M218.9 223h0M232.5 223h0M246.2 223h0M259.9 223h0M273.6 223h0M287.3 223h0M300.9 223h0M314.6 223h0M328.3 223h0M342 223h0M355.7 223h0M369.3 223h0M383 223h0M396.7 223h0M410.4 223h0M424.1 223h0M437.7 223h0M451.4 223h0M465.1 223h0M478.8 223h0M492.5 223h0M506.1 223h0M519.8 223h0M533.5 223h0M547.2 223h0M560.9 223h0M574.5 223h0M588.2 223h0M601.9 223h0M615.6 223h0M629.3 223h0M670.3 223h0M684 223h0M697.7 223h0M711.3 223h0M725 223h0M738.7 223h0M752.4 223h0M766.1 223h0M779.7 223h0M793.4 223h0M807.1 223h0M820.8 223h0M834.5 223h0M848.1 223h0M861.8 223h0M971.3 223h0M984.9 223h0M998.6 223h0M1012.3 223h0M1026 223h0M1039.7 223h0M1053.3 223h0M1067 223h0M1080.7 223h0M1094.4 223h0M1108.1 223h0M1121.7 223h0M1135.4 223h0M1149.1 223h0M1162.8 223h0M1176.5 223h0M1190.1 223h0M1203.8 223h0M1217.5 223h0M1231.2 223h0M1244.9 223h0M1258.5 223h0M1272.2 223h0M1285.9 223h0M1299.6 223h0M1313.3 223h0M1326.9 223h0M1340.6 223h0M1354.3 223h0M1368 223h0M1381.7 223h0M1395.3 223h0M1409 223h0M95.7 236.7h0M109.4 236.7h0M123.1 236.7h0M136.8 236.7h0M150.5 236.7h0M164.1 236.7h0M177.8 236.7h0M191.5 236.7h0M205.2 236.7h0M218.9 236.7h0M232.5 236.7h0M246.2 236.7h0M259.9 236.7h0M273.6 236.7h0M287.3 236.7h0M300.9 236.7h0M314.6 236.7h0M328.3 236.7h0M342 236.7h0M355.7 236.7h0M369.3 236.7h0M383 236.7h0M396.7 236.7h0M410.4 236.7h0M424.1 236.7h0M437.7 236.7h0M451.4 236.7h0M465.1 236.7h0M478.8 236.7h0M492.5 236.7h0M506.1 236.7h0M519.8 236.7h0M533.5 236.7h0M547.2 236.7h0M560.9 236.7h0M574.5 236.7h0M588.2 236.7h0M601.9 236.7h0M615.6 236.7h0M629.3 236.7h0M670.3 236.7h0M684 236.7h0M697.7 236.7h0M711.3 236.7h0M725 236.7h0M738.7 236.7h0M752.4 236.7h0M766.1 236.7h0M779.7 236.7h0M793.4 236.7h0M807.1 236.7h0M820.8 236.7h0M834.5 236.7h0M848.1 236.7h0M984.9 236.7h0M1012.3 236.7h0M1026 236.7h0M1039.7 236.7h0M1053.3 236.7h0M1067 236.7h0M1080.7 236.7h0M1094.4 236.7h0M1108.1 236.7h0M1121.7 236.7h0M1135.4 236.7h0M1203.8 236.7h0M1217.5 236.7h0M1231.2 236.7h0M1244.9 236.7h0M1258.5 236.7h0M1272.2 236.7h0M1285.9 236.7h0M1299.6 236.7h0M1313.3 236.7h0M1326.9 236.7h0M1340.6 236.7h0M1381.7 236.7h0M109.4 250.4h0M123.1 250.4h0M136.8 250.4h0M150.5 250.4h0M164.1 250.4h0M177.8 250.4h0M191.5 250.4h0M205.2 250.4h0M218.9 250.4h0M232.5 250.4h0M246.2 250.4h0M259.9 250.4h0M273.6 250.4h0M287.3 250.4h0M300.9 250.4h0M314.6 250.4h0M328.3 250.4h0M342 250.4h0M355.7 250.4h0M369.3 250.4h0M383 250.4h0M396.7 250.4h0M410.4 250.4h0M424.1 250.4h0M437.7 250.4h0M451.4 250.4h0M465.1 250.4h0M478.8 250.4h0M492.5 250.4h0M506.1 250.4h0M519.8 250.4h0M533.5 250.4h0M547.2 250.4h0M560.9 250.4h0M574.5 250.4h0M588.2 250.4h0M601.9 250.4h0M615.6 250.4h0M629.3 250.4h0M684 250.4h0M697.7 250.4h0M711.3 250.4h0M725 250.4h0M738.7 250.4h0M752.4 250.4h0M766.1 250.4h0M779.7 250.4h0M793.4 250.4h0M807.1 250.4h0M820.8 250.4h0M834.5 250.4h0M1012.3 250.4h0M1026 250.4h0M1039.7 250.4h0M1053.3 250.4h0M1067 250.4h0M1080.7 250.4h0M1094.4 250.4h0M1108.1 250.4h0M1121.7 250.4h0M1217.5 250.4h0M1231.2 250.4h0M1244.9 250.4h0M1258.5 250.4h0M1272.2 250.4h0M1285.9 250.4h0M1299.6 250.4h0M1313.3 250.4h0M1326.9 250.4h0M1381.7 250.4h0M109.4 264.1h0M123.1 264.1h0M136.8 264.1h0M150.5 264.1h0M164.1 264.1h0M177.8 264.1h0M191.5 264.1h0M205.2 264.1h0M218.9 264.1h0M232.5 264.1h0M246.2 264.1h0M259.9 264.1h0M273.6 264.1h0M287.3 264.1h0M300.9 264.1h0M314.6 264.1h0M328.3 264.1h0M342 264.1h0M355.7 264.1h0M369.3 264.1h0M383 264.1h0M396.7 264.1h0M410.4 264.1h0M424.1 264.1h0M437.7 264.1h0M451.4 264.1h0M465.1 264.1h0M478.8 264.1h0M492.5 264.1h0M506.1 264.1h0M519.8 264.1h0M533.5 264.1h0M547.2 264.1h0M560.9 264.1h0M574.5 264.1h0M588.2 264.1h0M601.9 264.1h0M615.6 264.1h0M629.3 264.1h0M642.9 264.1h0M684 264.1h0M697.7 264.1h0M711.3 264.1h0M725 264.1h0M738.7 264.1h0M752.4 264.1h0M766.1 264.1h0M779.7 264.1h0M793.4 264.1h0M807.1 264.1h0M820.8 264.1h0M834.5 264.1h0M1012.3 264.1h0M1026 264.1h0M1039.7 264.1h0M1053.3 264.1h0M1067 264.1h0M1080.7 264.1h0M1094.4 264.1h0M1108.1 264.1h0M1231.2 264.1h0M1244.9 264.1h0M1258.5 264.1h0M1272.2 264.1h0M1285.9 264.1h0M1299.6 264.1h0M1313.3 264.1h0M1326.9 264.1h0M1491.1 264.1h0M109.4 277.7h0M123.1 277.7h0M136.8 277.7h0M150.5 277.7h0M164.1 277.7h0M177.8 277.7h0M191.5 277.7h0M205.2 277.7h0M218.9 277.7h0M232.5 277.7h0M246.2 277.7h0M259.9 277.7h0M273.6 277.7h0M287.3 277.7h0M300.9 277.7h0M314.6 277.7h0M328.3 277.7h0M342 277.7h0M355.7 277.7h0M369.3 277.7h0M383 277.7h0M396.7 277.7h0M410.4 277.7h0M424.1 277.7h0M437.7 277.7h0M451.4 277.7h0M465.1 277.7h0M478.8 277.7h0M492.5 277.7h0M506.1 277.7h0M519.8 277.7h0M533.5 277.7h0M547.2 277.7h0M560.9 277.7h0M574.5 277.7h0M588.2 277.7h0M601.9 277.7h0M615.6 277.7h0M629.3 277.7h0M642.9 277.7h0M656.6 277.7h0M697.7 277.7h0M711.3 277.7h0M725 277.7h0M738.7 277.7h0M752.4 277.7h0M766.1 277.7h0M779.7 277.7h0M793.4 277.7h0M807.1 277.7h0M1012.3 277.7h0M1026 277.7h0M1039.7 277.7h0M1053.3 277.7h0M1067 277.7h0M1080.7 277.7h0M1094.4 277.7h0M1231.2 277.7h0M1258.5 277.7h0M1272.2 277.7h0M1285.9 277.7h0M1299.6 277.7h0M1313.3 277.7h0M1326.9 277.7h0M1340.6 277.7h0M1491.1 277.7h0M95.7 291.4h0M109.4 291.4h0M123.1 291.4h0M136.8 291.4h0M150.5 291.4h0M164.1 291.4h0M177.8 291.4h0M191.5 291.4h0M205.2 291.4h0M218.9 291.4h0M232.5 291.4h0M246.2 291.4h0M259.9 291.4h0M273.6 291.4h0M287.3 291.4h0M300.9 291.4h0M314.6 291.4h0M328.3 291.4h0M342 291.4h0M355.7 291.4h0M369.3 291.4h0M383 291.4h0M396.7 291.4h0M410.4 291.4h0M424.1 291.4h0M437.7 291.4h0M451.4 291.4h0M465.1 291.4h0M478.8 291.4h0M492.5 291.4h0M506.1 291.4h0M519.8 291.4h0M533.5 291.4h0M547.2 291.4h0M560.9 291.4h0M574.5 291.4h0M588.2 291.4h0M601.9 291.4h0M615.6 291.4h0M629.3 291.4h0M642.9 291.4h0M656.6 291.4h0M697.7 291.4h0M711.3 291.4h0M725 291.4h0M738.7 291.4h0M752.4 291.4h0M766.1 291.4h0M779.7 291.4h0M1012.3 291.4h0M1026 291.4h0M1039.7 291.4h0M1053.3 291.4h0M1067 291.4h0M1258.5 291.4h0M1272.2 291.4h0M1285.9 291.4h0M1299.6 291.4h0M1313.3 291.4h0M1326.9 291.4h0M1340.6 291.4h0M1354.3 291.4h0M1491.1 291.4h0M95.7 305.1h0M109.4 305.1h0M123.1 305.1h0M136.8 305.1h0M150.5 305.1h0M164.1 305.1h0M177.8 305.1h0M191.5 305.1h0M205.2 305.1h0M218.9 305.1h0M232.5 305.1h0M246.2 305.1h0M259.9 305.1h0M273.6 305.1h0M287.3 305.1h0M300.9 305.1h0M314.6 305.1h0M328.3 305.1h0M342 305.1h0M355.7 305.1h0M369.3 305.1h0M383 305.1h0M396.7 305.1h0M410.4 305.1h0M424.1 305.1h0M437.7 305.1h0M451.4 305.1h0M465.1 305.1h0M478.8 305.1h0M492.5 305.1h0M506.1 305.1h0M519.8 305.1h0M533.5 305.1h0M547.2 305.1h0M560.9 305.1h0M574.5 305.1h0M588.2 305.1h0M601.9 305.1h0M615.6 305.1h0M629.3 305.1h0M642.9 305.1h0M656.6 305.1h0M670.3 305.1h0M711.3 305.1h0M725 305.1h0M738.7 305.1h0M752.4 305.1h0M1026 305.1h0M1039.7 305.1h0M1053.3 305.1h0M1067 305.1h0M1258.5 305.1h0M1272.2 305.1h0M1285.9 305.1h0M1299.6 305.1h0M1313.3 305.1h0M1326.9 305.1h0M1340.6 305.1h0M1354.3 305.1h0M1368 305.1h0M1491.1 305.1h0M1504.8 305.1h0M95.7 318.8h0M109.4 318.8h0M123.1 318.8h0M136.8 318.8h0M150.5 318.8h0M164.1 318.8h0M177.8 318.8h0M191.5 318.8h0M205.2 318.8h0M218.9 318.8h0M232.5 318.8h0M246.2 318.8h0M259.9 318.8h0M273.6 318.8h0M287.3 318.8h0M300.9 318.8h0M314.6 318.8h0M328.3 318.8h0M342 318.8h0M355.7 318.8h0M369.3 318.8h0M383 318.8h0M396.7 318.8h0M410.4 318.8h0M424.1 318.8h0M437.7 318.8h0M451.4 318.8h0M465.1 318.8h0M478.8 318.8h0M492.5 318.8h0M506.1 318.8h0M519.8 318.8h0M533.5 318.8h0M547.2 318.8h0M560.9 318.8h0M574.5 318.8h0M588.2 318.8h0M601.9 318.8h0M615.6 318.8h0M629.3 318.8h0M642.9 318.8h0M656.6 318.8h0M670.3 318.8h0M684 318.8h0M711.3 318.8h0M1026 318.8h0M1039.7 318.8h0M1053.3 318.8h0M1067 318.8h0M1203.8 318.8h0M1272.2 318.8h0M1285.9 318.8h0M1299.6 318.8h0M1313.3 318.8h0M1326.9 318.8h0M1340.6 318.8h0M1354.3 318.8h0M1368 318.8h0M1491.1 318.8h0M1518.5 318.8h0M123.1 332.5h0M136.8 332.5h0M150.5 332.5h0M164.1 332.5h0M177.8 332.5h0M191.5 332.5h0M205.2 332.5h0M218.9 332.5h0M232.5 332.5h0M246.2 332.5h0M259.9 332.5h0M273.6 332.5h0M287.3 332.5h0M300.9 332.5h0M314.6 332.5h0M328.3 332.5h0M342 332.5h0M355.7 332.5h0M369.3 332.5h0M383 332.5h0M396.7 332.5h0M410.4 332.5h0M424.1 332.5h0M437.7 332.5h0M451.4 332.5h0M465.1 332.5h0M478.8 332.5h0M492.5 332.5h0M506.1 332.5h0M519.8 332.5h0M533.5 332.5h0M547.2 332.5h0M560.9 332.5h0M574.5 332.5h0M588.2 332.5h0M601.9 332.5h0M615.6 332.5h0M629.3 332.5h0M642.9 332.5h0M656.6 332.5h0M670.3 332.5h0M684 332.5h0M779.7 332.5h0M1039.7 332.5h0M1053.3 332.5h0M1067 332.5h0M1258.5 332.5h0M1272.2 332.5h0M1313.3 332.5h0M1326.9 332.5h0M1340.6 332.5h0M1354.3 332.5h0M1368 332.5h0M1532.1 332.5h0M123.1 346.1h0M136.8 346.1h0M150.5 346.1h0M164.1 346.1h0M177.8 346.1h0M191.5 346.1h0M205.2 346.1h0M218.9 346.1h0M232.5 346.1h0M246.2 346.1h0M259.9 346.1h0M273.6 346.1h0M287.3 346.1h0M300.9 346.1h0M314.6 346.1h0M328.3 346.1h0M342 346.1h0M355.7 346.1h0M369.3 346.1h0M383 346.1h0M396.7 346.1h0M410.4 346.1h0M424.1 346.1h0M437.7 346.1h0M451.4 346.1h0M465.1 346.1h0M478.8 346.1h0M492.5 346.1h0M506.1 346.1h0M519.8 346.1h0M533.5 346.1h0M547.2 346.1h0M560.9 346.1h0M574.5 346.1h0M588.2 346.1h0M601.9 346.1h0M615.6 346.1h0M629.3 346.1h0M642.9 346.1h0M656.6 346.1h0M670.3 346.1h0M684 346.1h0M697.7 346.1h0M711.3 346.1h0M725 346.1h0M738.7 346.1h0M752.4 346.1h0M766.1 346.1h0M1039.7 346.1h0M1053.3 346.1h0M1326.9 346.1h0M1340.6 346.1h0M136.8 359.8h0M150.5 359.8h0M164.1 359.8h0M177.8 359.8h0M191.5 359.8h0M205.2 359.8h0M218.9 359.8h0M232.5 359.8h0M246.2 359.8h0M259.9 359.8h0M273.6 359.8h0M287.3 359.8h0M300.9 359.8h0M314.6 359.8h0M328.3 359.8h0M342 359.8h0M355.7 359.8h0M369.3 359.8h0M383 359.8h0M396.7 359.8h0M410.4 359.8h0M424.1 359.8h0M437.7 359.8h0M451.4 359.8h0M465.1 359.8h0M478.8 359.8h0M492.5 359.8h0M506.1 359.8h0M519.8 359.8h0M533.5 359.8h0M547.2 359.8h0M560.9 359.8h0M574.5 359.8h0M588.2 359.8h0M601.9 359.8h0M615.6 359.8h0M629.3 359.8h0M642.9 359.8h0M656.6 359.8h0M670.3 359.8h0M684 359.8h0M697.7 359.8h0M711.3 359.8h0M725 359.8h0M738.7 359.8h0M752.4 359.8h0M766.1 359.8h0M1039.7 359.8h0M1053.3 359.8h0M1080.7 359.8h0M1272.2 359.8h0M1326.9 359.8h0M1532.1 359.8h0M150.5 373.5h0M164.1 373.5h0M177.8 373.5h0M191.5 373.5h0M205.2 373.5h0M218.9 373.5h0M232.5 373.5h0M246.2 373.5h0M259.9 373.5h0M273.6 373.5h0M287.3 373.5h0M300.9 373.5h0M314.6 373.5h0M328.3 373.5h0M342 373.5h0M355.7 373.5h0M369.3 373.5h0M383 373.5h0M396.7 373.5h0M410.4 373.5h0M424.1 373.5h0M437.7 373.5h0M451.4 373.5h0M465.1 373.5h0M478.8 373.5h0M492.5 373.5h0M506.1 373.5h0M519.8 373.5h0M533.5 373.5h0M547.2 373.5h0M560.9 373.5h0M574.5 373.5h0M588.2 373.5h0M601.9 373.5h0M615.6 373.5h0M629.3 373.5h0M642.9 373.5h0M656.6 373.5h0M670.3 373.5h0M684 373.5h0M697.7 373.5h0M711.3 373.5h0M725 373.5h0M738.7 373.5h0M752.4 373.5h0M766.1 373.5h0M1080.7 373.5h0M1272.2 373.5h0M1532.1 373.5h0M164.1 387.2h0M177.8 387.2h0M191.5 387.2h0M205.2 387.2h0M218.9 387.2h0M232.5 387.2h0M246.2 387.2h0M259.9 387.2h0M273.6 387.2h0M314.6 387.2h0M328.3 387.2h0M342 387.2h0M355.7 387.2h0M369.3 387.2h0M383 387.2h0M396.7 387.2h0M410.4 387.2h0M424.1 387.2h0M437.7 387.2h0M451.4 387.2h0M465.1 387.2h0M478.8 387.2h0M492.5 387.2h0M506.1 387.2h0M519.8 387.2h0M533.5 387.2h0M547.2 387.2h0M560.9 387.2h0M574.5 387.2h0M588.2 387.2h0M601.9 387.2h0M615.6 387.2h0M629.3 387.2h0M642.9 387.2h0M656.6 387.2h0M670.3 387.2h0M684 387.2h0M697.7 387.2h0M711.3 387.2h0M725 387.2h0M738.7 387.2h0M752.4 387.2h0M1080.7 387.2h0M1285.9 387.2h0M1450.1 387.2h0M1532.1 387.2h0M177.8 400.9h0M191.5 400.9h0M328.3 400.9h0M342 400.9h0M355.7 400.9h0M369.3 400.9h0M383 400.9h0M396.7 400.9h0M410.4 400.9h0M424.1 400.9h0M437.7 400.9h0M451.4 400.9h0M465.1 400.9h0M478.8 400.9h0M492.5 400.9h0M506.1 400.9h0M519.8 400.9h0M533.5 400.9h0M547.2 400.9h0M560.9 400.9h0M574.5 400.9h0M588.2 400.9h0M601.9 400.9h0M615.6 400.9h0M629.3 400.9h0M642.9 400.9h0M656.6 400.9h0M670.3 400.9h0M684 400.9h0M697.7 400.9h0M711.3 400.9h0M725 400.9h0M738.7 400.9h0M1231.2 400.9h0M1244.9 400.9h0M1285.9 400.9h0M1299.6 400.9h0M1436.4 400.9h0M1450.1 400.9h0M369.3 414.5h0M383 414.5h0M396.7 414.5h0M410.4 414.5h0M424.1 414.5h0M437.7 414.5h0M451.4 414.5h0M465.1 414.5h0M478.8 414.5h0M492.5 414.5h0M506.1 414.5h0M519.8 414.5h0M533.5 414.5h0M547.2 414.5h0M560.9 414.5h0M574.5 414.5h0M588.2 414.5h0M601.9 414.5h0M615.6 414.5h0M629.3 414.5h0M642.9 414.5h0M656.6 414.5h0M670.3 414.5h0M684 414.5h0M697.7 414.5h0M711.3 414.5h0M725 414.5h0M738.7 414.5h0M1258.5 414.5h0M1299.6 414.5h0M1422.7 414.5h0M1436.4 414.5h0M1450.1 414.5h0M369.3 428.2h0M383 428.2h0M396.7 428.2h0M410.4 428.2h0M424.1 428.2h0M437.7 428.2h0M451.4 428.2h0M465.1 428.2h0M478.8 428.2h0M492.5 428.2h0M506.1 428.2h0M519.8 428.2h0M533.5 428.2h0M547.2 428.2h0M560.9 428.2h0M574.5 428.2h0M588.2 428.2h0M601.9 428.2h0M615.6 428.2h0M629.3 428.2h0M642.9 428.2h0M656.6 428.2h0M670.3 428.2h0M684 428.2h0M697.7 428.2h0M711.3 428.2h0M1258.5 428.2h0M1272.2 428.2h0M1285.9 428.2h0M1313.3 428.2h0M1395.3 428.2h0M1409 428.2h0M1422.7 428.2h0M1436.4 428.2h0M1450.1 428.2h0M1559.5 428.2h0M369.3 441.9h0M383 441.9h0M396.7 441.9h0M410.4 441.9h0M424.1 441.9h0M437.7 441.9h0M451.4 441.9h0M465.1 441.9h0M478.8 441.9h0M492.5 441.9h0M506.1 441.9h0M519.8 441.9h0M533.5 441.9h0M547.2 441.9h0M560.9 441.9h0M574.5 441.9h0M588.2 441.9h0M601.9 441.9h0M615.6 441.9h0M629.3 441.9h0M642.9 441.9h0M656.6 441.9h0M670.3 441.9h0M684 441.9h0M697.7 441.9h0M1272.2 441.9h0M1285.9 441.9h0M1299.6 441.9h0M1368 441.9h0M1381.7 441.9h0M1395.3 441.9h0M1409 441.9h0M1422.7 441.9h0M1436.4 441.9h0M1450.1 441.9h0M1491.1 441.9h0M1504.8 441.9h0M1518.5 441.9h0M1559.5 441.9h0M369.3 455.6h0M383 455.6h0M396.7 455.6h0M410.4 455.6h0M424.1 455.6h0M437.7 455.6h0M451.4 455.6h0M465.1 455.6h0M478.8 455.6h0M492.5 455.6h0M506.1 455.6h0M519.8 455.6h0M533.5 455.6h0M547.2 455.6h0M560.9 455.6h0M574.5 455.6h0M588.2 455.6h0M601.9 455.6h0M615.6 455.6h0M629.3 455.6h0M642.9 455.6h0M656.6 455.6h0M670.3 455.6h0M684 455.6h0M1285.9 455.6h0M1299.6 455.6h0M1381.7 455.6h0M1395.3 455.6h0M1409 455.6h0M1422.7 455.6h0M1436.4 455.6h0M1450.1 455.6h0M1477.4 455.6h0M369.3 469.3h0M383 469.3h0M396.7 469.3h0M410.4 469.3h0M424.1 469.3h0M437.7 469.3h0M451.4 469.3h0M465.1 469.3h0M478.8 469.3h0M492.5 469.3h0M506.1 469.3h0M519.8 469.3h0M533.5 469.3h0M547.2 469.3h0M560.9 469.3h0M574.5 469.3h0M588.2 469.3h0M601.9 469.3h0M615.6 469.3h0M629.3 469.3h0M642.9 469.3h0M656.6 469.3h0M670.3 469.3h0M1285.9 469.3h0M1299.6 469.3h0M1313.3 469.3h0M1381.7 469.3h0M1395.3 469.3h0M1409 469.3h0M1422.7 469.3h0M1436.4 469.3h0M1477.4 469.3h0M1491.1 469.3h0M1600.5 469.3h0M1614.2 469.3h0M383 482.9h0M396.7 482.9h0M410.4 482.9h0M424.1 482.9h0M437.7 482.9h0M451.4 482.9h0M465.1 482.9h0M478.8 482.9h0M492.5 482.9h0M506.1 482.9h0M519.8 482.9h0M533.5 482.9h0M547.2 482.9h0M560.9 482.9h0M574.5 482.9h0M588.2 482.9h0M601.9 482.9h0M615.6 482.9h0M629.3 482.9h0M642.9 482.9h0M656.6 482.9h0M1299.6 482.9h0M1313.3 482.9h0M1326.9 482.9h0M1422.7 482.9h0M1436.4 482.9h0M1477.4 482.9h0M1491.1 482.9h0M1545.8 482.9h0M1559.5 482.9h0M1573.2 482.9h0M1614.2 482.9h0M383 496.6h0M396.7 496.6h0M410.4 496.6h0M424.1 496.6h0M437.7 496.6h0M451.4 496.6h0M465.1 496.6h0M478.8 496.6h0M492.5 496.6h0M506.1 496.6h0M519.8 496.6h0M533.5 496.6h0M547.2 496.6h0M560.9 496.6h0M574.5 496.6h0M588.2 496.6h0M601.9 496.6h0M615.6 496.6h0M629.3 496.6h0M642.9 496.6h0M656.6 496.6h0M1313.3 496.6h0M1326.9 496.6h0M1477.4 496.6h0M396.7 510.3h0M410.4 510.3h0M424.1 510.3h0M437.7 510.3h0M451.4 510.3h0M465.1 510.3h0M478.8 510.3h0M492.5 510.3h0M506.1 510.3h0M519.8 510.3h0M533.5 510.3h0M547.2 510.3h0M560.9 510.3h0M574.5 510.3h0M588.2 510.3h0M601.9 510.3h0M615.6 510.3h0M629.3 510.3h0M642.9 510.3h0M396.7 524h0M410.4 524h0M424.1 524h0M437.7 524h0M451.4 524h0M465.1 524h0M478.8 524h0M492.5 524h0M506.1 524h0M519.8 524h0M533.5 524h0M547.2 524h0M560.9 524h0M574.5 524h0M588.2 524h0M601.9 524h0M615.6 524h0M629.3 524h0M642.9 524h0M656.6 524h0M1354.3 524h0M1368 524h0M1381.7 524h0M1395.3 524h0M410.4 537.7h0M424.1 537.7h0M437.7 537.7h0M451.4 537.7h0M465.1 537.7h0M478.8 537.7h0M492.5 537.7h0M506.1 537.7h0M519.8 537.7h0M533.5 537.7h0M547.2 537.7h0M560.9 537.7h0M574.5 537.7h0M588.2 537.7h0M601.9 537.7h0M615.6 537.7h0M629.3 537.7h0M642.9 537.7h0M656.6 537.7h0M1422.7 537.7h0M1450.1 537.7h0M1463.7 537.7h0M1477.4 537.7h0M1491.1 537.7h0M1504.8 537.7h0M1532.1 537.7h0M1545.8 537.7h0M410.4 551.3h0M424.1 551.3h0M437.7 551.3h0M451.4 551.3h0M465.1 551.3h0M478.8 551.3h0M492.5 551.3h0M506.1 551.3h0M519.8 551.3h0M533.5 551.3h0M547.2 551.3h0M560.9 551.3h0M574.5 551.3h0M588.2 551.3h0M601.9 551.3h0M615.6 551.3h0M629.3 551.3h0M642.9 551.3h0M656.6 551.3h0M1518.5 551.3h0M410.4 565h0M424.1 565h0M437.7 565h0M451.4 565h0M465.1 565h0M478.8 565h0M492.5 565h0M506.1 565h0M519.8 565h0M533.5 565h0M547.2 565h0M560.9 565h0M574.5 565h0M588.2 565h0M601.9 565h0M615.6 565h0M629.3 565h0M642.9 565h0M656.6 565h0M670.3 565h0M1600.5 565h0M396.7 578.7h0M410.4 578.7h0M424.1 578.7h0M437.7 578.7h0M451.4 578.7h0M465.1 578.7h0M478.8 578.7h0M492.5 578.7h0M506.1 578.7h0M519.8 578.7h0M533.5 578.7h0M547.2 578.7h0M560.9 578.7h0M574.5 578.7h0M588.2 578.7h0M601.9 578.7h0M615.6 578.7h0M629.3 578.7h0M642.9 578.7h0M656.6 578.7h0M670.3 578.7h0M766.1 578.7h0M1586.9 578.7h0M1600.5 578.7h0M1614.2 578.7h0M396.7 592.4h0M410.4 592.4h0M424.1 592.4h0M437.7 592.4h0M451.4 592.4h0M465.1 592.4h0M478.8 592.4h0M492.5 592.4h0M506.1 592.4h0M519.8 592.4h0M533.5 592.4h0M547.2 592.4h0M560.9 592.4h0M574.5 592.4h0M588.2 592.4h0M601.9 592.4h0M615.6 592.4h0M629.3 592.4h0M642.9 592.4h0M656.6 592.4h0M670.3 592.4h0M752.4 592.4h0M766.1 592.4h0M1586.9 592.4h0M1600.5 592.4h0M1614.2 592.4h0M396.7 606.1h0M410.4 606.1h0M424.1 606.1h0M437.7 606.1h0M451.4 606.1h0M465.1 606.1h0M478.8 606.1h0M492.5 606.1h0M506.1 606.1h0M519.8 606.1h0M533.5 606.1h0M547.2 606.1h0M560.9 606.1h0M574.5 606.1h0M588.2 606.1h0M601.9 606.1h0M615.6 606.1h0M629.3 606.1h0M642.9 606.1h0M656.6 606.1h0M670.3 606.1h0M738.7 606.1h0M752.4 606.1h0M766.1 606.1h0M1532.1 606.1h0M1545.8 606.1h0M1559.5 606.1h0M1573.2 606.1h0M1586.9 606.1h0M1600.5 606.1h0M1614.2 606.1h0M383 619.7h0M396.7 619.7h0M410.4 619.7h0M424.1 619.7h0M437.7 619.7h0M451.4 619.7h0M465.1 619.7h0M478.8 619.7h0M492.5 619.7h0M506.1 619.7h0M519.8 619.7h0M533.5 619.7h0M547.2 619.7h0M560.9 619.7h0M574.5 619.7h0M588.2 619.7h0M601.9 619.7h0M615.6 619.7h0M629.3 619.7h0M642.9 619.7h0M656.6 619.7h0M725 619.7h0M738.7 619.7h0M752.4 619.7h0M766.1 619.7h0M1518.5 619.7h0M1532.1 619.7h0M1545.8 619.7h0M1559.5 619.7h0M1573.2 619.7h0M1586.9 619.7h0M1600.5 619.7h0M1614.2 619.7h0M383 633.4h0M396.7 633.4h0M410.4 633.4h0M424.1 633.4h0M437.7 633.4h0M451.4 633.4h0M465.1 633.4h0M478.8 633.4h0M492.5 633.4h0M506.1 633.4h0M519.8 633.4h0M533.5 633.4h0M547.2 633.4h0M560.9 633.4h0M574.5 633.4h0M588.2 633.4h0M601.9 633.4h0M615.6 633.4h0M629.3 633.4h0M711.3 633.4h0M725 633.4h0M738.7 633.4h0M752.4 633.4h0M1504.8 633.4h0M1518.5 633.4h0M1532.1 633.4h0M1545.8 633.4h0M1559.5 633.4h0M1573.2 633.4h0M1586.9 633.4h0M1600.5 633.4h0M1614.2 633.4h0M396.7 647.1h0M410.4 647.1h0M424.1 647.1h0M437.7 647.1h0M451.4 647.1h0M465.1 647.1h0M478.8 647.1h0M492.5 647.1h0M506.1 647.1h0M519.8 647.1h0M533.5 647.1h0M547.2 647.1h0M560.9 647.1h0M574.5 647.1h0M588.2 647.1h0M601.9 647.1h0M615.6 647.1h0M725 647.1h0M738.7 647.1h0M752.4 647.1h0M1504.8 647.1h0M1518.5 647.1h0M1532.1 647.1h0M1545.8 647.1h0M1559.5 647.1h0M1573.2 647.1h0M1586.9 647.1h0M1600.5 647.1h0M1614.2 647.1h0M410.4 660.8h0M424.1 660.8h0M437.7 660.8h0M451.4 660.8h0M465.1 660.8h0M478.8 660.8h0M492.5 660.8h0M506.1 660.8h0M519.8 660.8h0M533.5 660.8h0M547.2 660.8h0M560.9 660.8h0M574.5 660.8h0M588.2 660.8h0M601.9 660.8h0M615.6 660.8h0M711.3 660.8h0M725 660.8h0M738.7 660.8h0M752.4 660.8h0M1450.1 660.8h0M1463.7 660.8h0M1477.4 660.8h0M1491.1 660.8h0M1504.8 660.8h0M1518.5 660.8h0M1532.1 660.8h0M1545.8 660.8h0M1559.5 660.8h0M1573.2 660.8h0M1586.9 660.8h0M1600.5 660.8h0M1614.2 660.8h0M410.4 674.5h0M424.1 674.5h0M437.7 674.5h0M451.4 674.5h0M465.1 674.5h0M478.8 674.5h0M492.5 674.5h0M506.1 674.5h0M519.8 674.5h0M533.5 674.5h0M547.2 674.5h0M560.9 674.5h0M574.5 674.5h0M588.2 674.5h0M601.9 674.5h0M615.6 674.5h0M711.3 674.5h0M725 674.5h0M738.7 674.5h0M1436.4 674.5h0M1450.1 674.5h0M1463.7 674.5h0M1477.4 674.5h0M1491.1 674.5h0M1504.8 674.5h0M1518.5 674.5h0M1532.1 674.5h0M1545.8 674.5h0M1559.5 674.5h0M1573.2 674.5h0M1586.9 674.5h0M1600.5 674.5h0M1614.2 674.5h0M410.4 688.1h0M424.1 688.1h0M437.7 688.1h0M451.4 688.1h0M465.1 688.1h0M478.8 688.1h0M492.5 688.1h0M506.1 688.1h0M519.8 688.1h0M533.5 688.1h0M547.2 688.1h0M560.9 688.1h0M574.5 688.1h0M588.2 688.1h0M601.9 688.1h0M615.6 688.1h0M711.3 688.1h0M725 688.1h0M738.7 688.1h0M1422.7 688.1h0M1436.4 688.1h0M1450.1 688.1h0M1463.7 688.1h0M1477.4 688.1h0M1491.1 688.1h0M1504.8 688.1h0M1518.5 688.1h0M1532.1 688.1h0M1545.8 688.1h0M1559.5 688.1h0M1573.2 688.1h0M1586.9 688.1h0M1600.5 688.1h0M1614.2 688.1h0M424.1 701.8h0M437.7 701.8h0M451.4 701.8h0M465.1 701.8h0M478.8 701.8h0M492.5 701.8h0M506.1 701.8h0M519.8 701.8h0M533.5 701.8h0M547.2 701.8h0M560.9 701.8h0M574.5 701.8h0M588.2 701.8h0M601.9 701.8h0M711.3 701.8h0M725 701.8h0M738.7 701.8h0M1422.7 701.8h0M1436.4 701.8h0M1450.1 701.8h0M1463.7 701.8h0M1477.4 701.8h0M1491.1 701.8h0M1504.8 701.8h0M1518.5 701.8h0M1532.1 701.8h0M1545.8 701.8h0M1559.5 701.8h0M1573.2 701.8h0M1586.9 701.8h0M1600.5 701.8h0M1614.2 701.8h0M424.1 715.5h0M437.7 715.5h0M451.4 715.5h0M465.1 715.5h0M478.8 715.5h0M492.5 715.5h0M506.1 715.5h0M519.8 715.5h0M533.5 715.5h0M547.2 715.5h0M560.9 715.5h0M574.5 715.5h0M588.2 715.5h0M1422.7 715.5h0M1436.4 715.5h0M1450.1 715.5h0M1463.7 715.5h0M1477.4 715.5h0M1491.1 715.5h0M1504.8 715.5h0M1518.5 715.5h0M1532.1 715.5h0M1545.8 715.5h0M1559.5 715.5h0M1573.2 715.5h0M1586.9 715.5h0M1600.5 715.5h0M1614.2 715.5h0M424.1 729.2h0M437.7 729.2h0M451.4 729.2h0M465.1 729.2h0M478.8 729.2h0M492.5 729.2h0M506.1 729.2h0M519.8 729.2h0M533.5 729.2h0M547.2 729.2h0M560.9 729.2h0M574.5 729.2h0M588.2 729.2h0M1422.7 729.2h0M1436.4 729.2h0M1450.1 729.2h0M1463.7 729.2h0M1477.4 729.2h0M1491.1 729.2h0M1504.8 729.2h0M1518.5 729.2h0M1532.1 729.2h0M1545.8 729.2h0M1559.5 729.2h0M1573.2 729.2h0M1586.9 729.2h0M1600.5 729.2h0M1614.2 729.2h0M437.7 742.9h0M451.4 742.9h0M465.1 742.9h0M478.8 742.9h0M492.5 742.9h0M506.1 742.9h0M519.8 742.9h0M533.5 742.9h0M547.2 742.9h0M560.9 742.9h0M574.5 742.9h0M1436.4 742.9h0M1450.1 742.9h0M1463.7 742.9h0M1477.4 742.9h0M1491.1 742.9h0M1504.8 742.9h0M1518.5 742.9h0M1532.1 742.9h0M1545.8 742.9h0M1559.5 742.9h0M1573.2 742.9h0M1586.9 742.9h0M1600.5 742.9h0M1614.2 742.9h0M451.4 756.5h0M465.1 756.5h0M478.8 756.5h0M492.5 756.5h0M506.1 756.5h0M519.8 756.5h0M533.5 756.5h0M547.2 756.5h0M560.9 756.5h0M574.5 756.5h0M1436.4 756.5h0M1450.1 756.5h0M1463.7 756.5h0M1477.4 756.5h0M1491.1 756.5h0M1504.8 756.5h0M1518.5 756.5h0M1532.1 756.5h0M1545.8 756.5h0M1559.5 756.5h0M1573.2 756.5h0M1586.9 756.5h0M1600.5 756.5h0M1614.2 756.5h0M451.4 770.2h0M465.1 770.2h0M478.8 770.2h0M492.5 770.2h0M506.1 770.2h0M519.8 770.2h0M533.5 770.2h0M547.2 770.2h0M560.9 770.2h0M1436.4 770.2h0M1450.1 770.2h0M1463.7 770.2h0M1477.4 770.2h0M1491.1 770.2h0M1504.8 770.2h0M1518.5 770.2h0M1532.1 770.2h0M1545.8 770.2h0M1559.5 770.2h0M1573.2 770.2h0M1600.5 770.2h0M1614.2 770.2h0M451.4 783.9h0M465.1 783.9h0M478.8 783.9h0M492.5 783.9h0M506.1 783.9h0M519.8 783.9h0M533.5 783.9h0M1436.4 783.9h0M1450.1 783.9h0M1463.7 783.9h0M1477.4 783.9h0M1491.1 783.9h0M1504.8 783.9h0M1518.5 783.9h0M465.1 797.6h0M478.8 797.6h0M1436.4 797.6h0M1450.1 797.6h0M1463.7 797.6h0"/>
+        <g class="routes-ghost"><path data-g="1" class="route" d="M182 129.5 Q501.8 386.7 449.6 793.7"/><path data-g="2" class="route" d="M449.6 793.7 Q639.2 716.2 660.1 512.4"/><path data-g="3" class="route" d="M660.1 512.4 Q1040.1 693.2 1430.2 535.2"/></g>
+        <g class="routes"><path id="seg1" class="route" d="M182 129.5 Q501.8 386.7 449.6 793.7"/><path id="seg2" class="route" d="M449.6 793.7 Q639.2 716.2 660.1 512.4"/><path id="seg3" class="route" d="M660.1 512.4 Q1040.1 693.2 1430.2 535.2"/></g>
+        <g class="mk" id="mk-marrakech" transform="translate(182 129.5)"><circle class="halo" r="22"/><circle class="core" r="8"/><text x="-16" y="-14" text-anchor="end">Marrakech</text></g><g class="mk" id="mk-cape" transform="translate(449.6 793.7)"><circle class="halo" r="22"/><circle class="core" r="8"/><text x="16" y="8" text-anchor="start">Cape Town</text></g><g class="mk" id="mk-zanzibar" transform="translate(660.1 512.4)"><circle class="halo" r="22"/><circle class="core" r="8"/><text x="16" y="-10" text-anchor="start">Zanzibar</text></g><g class="mk" id="mk-bali" transform="translate(1430.2 535.2)"><circle class="halo" r="22"/><circle class="core" r="8"/><text x="16" y="-10" text-anchor="start">Bali</text></g>
+        <g id="jrPlane" class="jr-plane"><path d="M-14 -2.5 L4 -2.5 L10 -12 L14 -12 L10 -2.5 L16 -2 L19 -6 L22 -6 L20 0 L22 6 L19 6 L16 2 L10 2.5 L14 12 L10 12 L4 2.5 L-14 2.5 Z"/></g>
+      </g>
+    </svg>
+    <div class="jr-cards" id="jrCards"><article class="jr-card" data-k="marrakech"><img src="img/marrakech.webp" alt="" loading="lazy"><div class="jr-cb"><p class="jr-num">01 / 04 · Morocco</p><h3>Marrakech</h3><p class="jr-co">31.63°N · 7.99°W</p><dl><div><dt>From*</dt><dd>$480</dd></div><div><dt>Stay</dt><dd>3–5 nights</dd></div><div><dt>Best</dt><dd>Mar–May · Sep–Nov</dd></div></dl><button class="btn btn-ink btn-sm" type="button" data-explore="marrakech">Explore Marrakech <span class="arr" aria-hidden="true">→</span></button></div></article><article class="jr-card" data-k="cape"><img src="img/cape.webp" alt="" loading="lazy"><div class="jr-cb"><p class="jr-num">02 / 04 · South Africa</p><h3>Cape Town</h3><p class="jr-co">33.92°S · 18.42°E</p><dl><div><dt>From*</dt><dd>$650</dd></div><div><dt>Stay</dt><dd>4–6 nights</dd></div><div><dt>Best</dt><dd>Nov–Mar</dd></div></dl><button class="btn btn-ink btn-sm" type="button" data-explore="cape">Explore Cape Town <span class="arr" aria-hidden="true">→</span></button></div></article><article class="jr-card" data-k="zanzibar"><img src="img/zanzibar.webp" alt="" loading="lazy"><div class="jr-cb"><p class="jr-num">03 / 04 · Tanzania</p><h3>Zanzibar</h3><p class="jr-co">6.16°S · 39.19°E</p><dl><div><dt>From*</dt><dd>$550</dd></div><div><dt>Stay</dt><dd>5–7 nights</dd></div><div><dt>Best</dt><dd>Jun–Oct · Dec–Feb</dd></div></dl><button class="btn btn-ink btn-sm" type="button" data-explore="zanzibar">Explore Zanzibar <span class="arr" aria-hidden="true">→</span></button></div></article><article class="jr-card" data-k="bali"><img src="img/bali.webp" alt="" loading="lazy"><div class="jr-cb"><p class="jr-num">04 / 04 · Indonesia</p><h3>Bali</h3><p class="jr-co">8.51°S · 115.26°E</p><dl><div><dt>From*</dt><dd>$720</dd></div><div><dt>Stay</dt><dd>6–9 nights</dd></div><div><dt>Best</dt><dd>Apr–Oct</dd></div></dl><button class="btn btn-ink btn-sm" type="button" data-explore="bali">Explore Bali <span class="arr" aria-hidden="true">→</span></button></div></article><article class="jr-card jr-sum" data-k="all"><div class="jr-cb"><p class="jr-num">The full route</p><h3>4 places.<br>1 enquiry.</h3><p class="jr-co">Start with one, or ask us to combine two.</p><a class="btn btn-sun btn-sm" href="#enquire" data-plan>Plan My Trip <span class="arr" aria-hidden="true">→</span></a></div></article></div>
+    <ol class="jr-steps" id="jrSteps" aria-hidden="true"><li>Marrakech</li><li>Cape Town</li><li>Zanzibar</li><li>Bali</li></ol>
+  </div>
+</section>
+
+<section class="sec why" id="about" aria-labelledby="why-h">
+  <div class="wrap">
+    <div class="shead">
+      <div>
+        <p class="eyebrow">Why Roamly</p>
+        <h2 class="h2" id="why-h" data-split style="margin-top:14px">Travel should feel exciting before you even leave.</h2>
+      </div>
+      <p class="lede" style="font-family:var(--f-display);font-style:italic;color:var(--sun-ink);font-size:clamp(24px,2.6vw,32px)">Less planning. More living.</p>
+    </div>
+    <div class="benefits" id="benefits">
+      <div class="benefit"><span class="k">01</span>
+        <svg class="ic" viewBox="0 0 44 44" fill="none" aria-hidden="true"><circle cx="22" cy="22" r="17" stroke="currentColor" stroke-width="1.6"/><path d="M27.5 16.5l-3.3 8-8 3.3 3.3-8 8-3.3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <h3>Thoughtfully curated</h3><p>Picked around the trip you want.</p></div>
+      <div class="benefit"><span class="k">02</span>
+        <svg class="ic" viewBox="0 0 44 44" fill="none" aria-hidden="true"><rect x="9" y="10" width="26" height="26" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M9 17h26M16 7v6M28 7v6M15 25l4 4 9-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>Less planning stress</h3><p>Essentials clear before you enquire.</p></div>
+      <div class="benefit"><span class="k">03</span>
+        <svg class="ic" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M8 30c6 0 8-16 14-16s8 16 14 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="30" r="2.5" fill="currentColor"/><circle cx="36" cy="30" r="2.5" fill="currentColor"/><circle cx="22" cy="14" r="2.5" fill="currentColor"/></svg>
+        <h3>Flexible experiences</h3><p>For every style and budget.</p></div>
+      <div class="benefit"><span class="k">04</span>
+        <svg class="ic" viewBox="0 0 44 44" fill="none" aria-hidden="true"><path d="M10 12h24a2 2 0 012 2v13a2 2 0 01-2 2H20l-7 6v-6h-3a2 2 0 01-2-2V14a2 2 0 012-2z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M15 19h14M15 23h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <h3>Human support</h3><p>Real people answer your questions.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="shead">
+      <div>
+        <p class="eyebrow">How it works</p>
+        <h2 class="h2" id="how-h" data-split style="margin-top:14px">Your next adventure, in three simple steps.</h2>
+      </div>
+      <p class="lede">No accounts. No deposits.</p>
+    </div>
+    <div class="flightwrap" id="flight" aria-hidden="true">
+      <svg viewBox="0 0 1200 90" preserveAspectRatio="none" fill="none"><path id="flightPath" d="M0 80 C 300 -20, 900 -20, 1200 80" stroke="var(--sun)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
+      <svg class="plane" id="plane" viewBox="0 0 24 24" fill="currentColor" style="position:absolute;left:0;top:0;width:30px;height:30px;inset:auto"><path transform="translate(24 0) scale(-1 1)" d="M2 13.5v-3l8-1 4-7.5h2l-2 7.5 5 .5 2-2.5h1.5l-1 4 1 4H21l-2-2.5-5 .5 2 7.5h-2l-4-7.5z"/></svg>
+    </div>
+    <ol class="steps" data-stagger>
+      <li class="step"><span class="n" aria-hidden="true">1</span><h3>Discover</h3><p>Find a destination or experience you love.</p></li>
+      <li class="step"><span class="n" aria-hidden="true">2</span><h3>Tell us your plans</h3><p>Destination, dates, group size and budget.</p></li>
+      <li class="step"><span class="n" aria-hidden="true">3</span><h3>Plan your escape</h3><p>Get 2–3 options by email. Nothing is booked until you say yes.</p></li>
+    </ol>
+    <div class="after dark">
+      <p>Two minutes to enquire. Zero commitment.</p>
+      <a class="btn btn-sun" href="#enquire" data-plan>Start Planning <span class="arr" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+
+<section class="collage" id="collage" aria-labelledby="cl-h">
+  <div class="cl-stage" id="clStage">
+    <div class="cl-center" id="clCenter">
+      <picture><source media="(max-width: 700px)" srcset="img/collage-center-sm.webp"><img src="img/collage-center.webp" alt="Sunset behind a sea temple on a rocky outcrop in Bali" loading="lazy" width="1900" height="1266"></picture>
+      <div class="cl-over" id="clOver"><p class="eyebrow">Trip finder</p><p class="cl-big">Every trip, planned around the way <em>you</em> travel.</p><a class="btn btn-sun" href="#styles">Find My Trip <span class="arr" aria-hidden="true">→</span></a></div>
+    </div>
+    <div class="cl-tiles" id="clTiles" aria-hidden="true"><img class="tile" src="img/cape.webp" alt="" loading="lazy" style="--x:8;--y:16;--w:15"><img class="tile" src="img/p-tiles.webp" alt="" loading="lazy" style="--x:30;--y:8;--w:11"><img class="tile" src="img/s-adventure.webp" alt="" loading="lazy" style="--x:70;--y:9;--w:13"><img class="tile" src="img/marrakech.webp" alt="" loading="lazy" style="--x:91;--y:22;--w:12"><img class="tile" src="img/s-beach.webp" alt="" loading="lazy" style="--x:7;--y:72;--w:12"><img class="tile" src="img/s-culture.webp" alt="" loading="lazy" style="--x:27;--y:88;--w:14"><img class="tile" src="img/zanzibar.webp" alt="" loading="lazy" style="--x:73;--y:88;--w:12"><img class="tile" src="img/bali.webp" alt="" loading="lazy" style="--x:92;--y:74;--w:15"></div>
+    <h2 class="cl-words" id="cl-h"><span class="cl-l">Less planning.</span><span class="cl-r">More living.</span></h2>
+  </div>
+</section>
+
+<section class="sec styles-sec" id="styles" aria-labelledby="sty-h">
+  <div class="wrap">
+    <div class="shead">
+      <div>
+        <p class="eyebrow">Trip finder</p>
+        <h2 class="h2" id="sty-h" data-split style="margin-top:14px">What kind of escape do you need?</h2>
+      </div>
+      <p class="lede">Pick one or more.</p>
+    </div>
+    <ul class="sgrid" id="sgrid" aria-label="Travel styles"></ul>
+    <div class="finder">
+      <button class="btn btn-ink" type="button" id="findBtn">Find My Trip <span class="arr" aria-hidden="true">→</span></button>
+      <span class="count" id="selCount">0 selected</span>
+      <button class="link" type="button" id="clearBtn" hidden>Clear</button>
+      <p class="prompt" id="prompt" role="status" aria-live="polite"></p>
+    </div>
+    <div id="result" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="sec" id="included" aria-labelledby="inc-h">
+  <div class="wrap">
+    <div class="shead">
+      <div>
+        <p class="eyebrow">Package inclusions</p>
+        <h2 class="h2" id="inc-h" data-split style="margin-top:14px">Know what you're signing up for.</h2>
+      </div>
+      <p class="lede">Every proposal lists its own.</p>
+    </div>
+    <div class="ledger" data-stagger>
+      <div class="yes dark">
+        <h3>Usually included</h3>
+        <ul>
+          <li><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Accommodation for the stated nights</li>
+          <li><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Selected guided experiences</li>
+          <li><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Local activity recommendations</li>
+          <li><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>A suggested itinerary</li>
+          <li><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Trip planning support</li>
+        </ul>
+      </div>
+      <div class="no">
+        <h3>Usually not</h3>
+        <ul>
+          <li><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>International flights</li>
+          <li><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Personal spending</li>
+          <li><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Optional activities</li>
+          <li><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Travel insurance</li>
+          <li><svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Visa fees &amp; entry requirements</li>
+        </ul>
+      </div>
+    </div>
+    <p class="fine varies">Inclusions vary by package.</p>
+  </div>
+</section>
+
+<section class="sec why" id="stories" aria-labelledby="pro-h">
+  <div class="wrap">
+    <div class="shead">
+      <div>
+        <p class="eyebrow">Trip sketches</p>
+        <h2 class="h2" id="pro-h" data-split style="margin-top:14px">Travel is better when the details feel right.</h2>
+      </div>
+      <span class="label-sample">Illustrative profiles · not real reviews</span>
+    </div>
+    <div class="profiles" data-stagger>
+      <article class="profile">
+        <div class="pph"><img src="img/p-temple.webp" alt="Ulun Danu Beratan water temple on a still lake in Bali" loading="lazy" data-parallax></div>
+        <p class="who">Couple · 6 nights · Bali</p>
+        <blockquote>“One big sunset, one great dinner, no 5am starts.”</blockquote>
+      </article>
+      <article class="profile">
+        <div class="pph"><img src="img/p-tiles.webp" alt="Ornate zellige tile fountain with carved plaster arches in Morocco" loading="lazy" data-parallax></div>
+        <p class="who">6 friends · 4 nights · Marrakech</p>
+        <blockquote>“One riad, great food, zero arguing about plans.”</blockquote>
+      </article>
+      <article class="profile">
+        <div class="pph"><img src="img/p-kasbah.webp" alt="Clay-built kasbah village beneath palm groves and the Atlas Mountains" loading="lazy" data-parallax></div>
+        <p class="who">Solo · 5 nights · Marrakech</p>
+        <blockquote>“Independent, with someone to call if I need it.”</blockquote>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="enquire" aria-labelledby="enq-h">
+  <div class="wrap enq">
+    <div class="enq-side">
+      <p class="eyebrow">Trip enquiry</p>
+      <h2 class="h2" id="enq-h" data-split style="margin-top:14px">Let's plan something worth looking forward to.</h2>
+      <ol class="next" aria-label="What happens next">
+        <li><span class="k">01</span>Send the basics</li>
+        <li><span class="k">02</span>A planner reviews it</li>
+        <li><span class="k">03</span>Get 2–3 options by email</li>
+      </ol>
+      <p class="demo">Prototype · enquiries aren't sent anywhere</p>
+    </div>
+    <div class="formcard" id="formcard">
+      <form id="enqForm" novalidate>
+        <div id="esum" class="esum" tabindex="-1" hidden></div>
+        <p id="prefilled" class="prefilled" hidden></p>
+        <div class="row2">
+          <div class="field"><label for="f-name">Full name</label><input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="e-name"><p class="err" id="e-name" hidden></p></div>
+          <div class="field"><label for="f-email">Email address</label><input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="e-email"><p class="err" id="e-email" hidden></p></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="f-dest">Preferred destination</label>
+            <select id="f-dest" name="dest" required aria-describedby="e-dest">
+              <option value="">Choose a destination</option>
+              <option value="cape">Cape Town, South Africa</option>
+              <option value="marrakech">Marrakech, Morocco</option>
+              <option value="bali">Bali, Indonesia</option>
+              <option value="zanzibar">Zanzibar, Tanzania</option>
+              <option value="unsure">Not sure yet</option>
+            </select><p class="err" id="e-dest" hidden></p></div>
+          <div class="field"><label for="f-when">Travel month</label>
+            <select id="f-when" name="when" required aria-describedby="e-when"><option value="">Choose a month</option></select><p class="err" id="e-when" hidden></p></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="f-pax">Travelers</label><input id="f-pax" name="pax" type="number" inputmode="numeric" min="1" max="20" step="1" value="2" required aria-describedby="e-pax"><p class="err" id="e-pax" hidden></p></div>
+          <div class="field"><label for="f-budget">Budget per person <span class="opt">(excl. flights)</span></label>
+            <select id="f-budget" name="budget" required aria-describedby="e-budget">
+              <option value="">Choose a range</option>
+              <option>Under $600</option><option>$600 – $1,000</option><option>$1,000 – $1,500</option><option>$1,500 – $2,500</option><option>$2,500+</option>
+            </select><p class="err" id="e-budget" hidden></p></div>
+        </div>
+        <fieldset class="field" id="f-styles" aria-describedby="e-styles">
+          <legend>Travel style</legend>
+          <div class="checks" id="styleChecks"></div>
+          <p class="err" id="e-styles" hidden></p>
+        </fieldset>
+        <div class="field"><label for="f-notes">Anything else? <span class="opt">(optional)</span></label><textarea id="f-notes" name="notes" maxlength="800" placeholder="Occasion, pace, must-dos…"></textarea></div>
+        <div class="submit-row">
+          <button class="btn btn-sun" type="submit" id="submitBtn">Send My Trip Enquiry <span class="arr" aria-hidden="true">→</span></button>
+        </div>
+      </form>
+      <div id="success" class="success" hidden tabindex="-1"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="faq" aria-labelledby="faq-h">
+  <div class="wrap faq-grid">
+    <div>
+      <p class="eyebrow">Questions</p>
+      <h2 class="h2" id="faq-h" data-split style="margin-top:14px">Good to know.</h2>
+    </div>
+    <div class="faq" data-stagger>
+      <details><summary>How does the trip-planning process work?<span class="pm" aria-hidden="true"></span></summary><p class="ans">Browse, send a short enquiry, and a planner replies with two or three options. You refine your favourite together before anything is confirmed.</p></details>
+      <details><summary>Are flights included in the package price?<span class="pm" aria-hidden="true"></span></summary><p class="ans">No. Starting prices exclude international flights unless a package says otherwise.</p></details>
+      <details><summary>Can I customize a trip?<span class="pm" aria-hidden="true"></span></summary><p class="ans">Yes. Change the length, swap activities or upgrade your stay. Changes can affect the price.</p></details>
+      <details><summary>Can I travel with a group of friends?<span class="pm" aria-hidden="true"></span></summary><p class="ans">Yes. Choose "Friends &amp; Group Trips" and tell us the group size. Shared villas and riads work well for groups.</p></details>
+      <details><summary>How far in advance should I plan?<span class="pm" aria-hidden="true"></span></summary><p class="ans">Two to four months gives the most choice, especially in peak season. Shorter notice can still work.</p></details>
+      <details><summary>What happens after I submit an enquiry?<span class="pm" aria-hidden="true"></span></summary><p class="ans">A planner would email you options and questions. Nothing is booked or charged. On this prototype the form confirms, but nothing is sent.</p></details>
+      <details><summary>Are the prices fixed?<span class="pm" aria-hidden="true"></span></summary><p class="ans">No. Prices here are illustrative. For a real trip, availability, pricing and cancellation terms are confirmed in writing before you pay.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final on-image" aria-labelledby="fin-h">
+  <div class="bgw" id="finalBg">
+    <picture>
+      <source media="(max-width: 700px)" srcset="img/final-sm.webp">
+      <img src="img/final.webp" alt="" loading="lazy" width="1800" height="1197">
+    </picture>
+  </div>
+  <div class="wrap">
+    <h2 id="fin-h" data-split>Somewhere out there, your next story is waiting.</h2>
+    <a class="btn btn-sun" href="#enquire" data-plan data-fade-in>Plan My Trip <span class="arr" aria-hidden="true">→</span></a>
+  </div>
+</section>
+</main>
+
+<footer class="foot dark">
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <a class="logo" href="#top">roamly<i aria-hidden="true"></i></a>
+        <p class="tagline">Less planning. More living.</p>
+        <p class="fine" style="color:var(--on-band-2);margin-top:10px;max-width:32ch">Curated trips to Cape Town, Marrakech, Bali and Zanzibar.</p>
+      </div>
+      <div><h3>Explore</h3><ul><li><a href="#destinations">Destinations</a></li><li><a href="#experiences">Experiences</a></li><li><a href="#how">How It Works</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+      <div><h3>Contact</h3><ul><li class="ph-text">hello@[your-domain]</li><li class="ph-text">+000 000 0000</li></ul></div>
+      <div><h3>Social</h3><ul><li class="ph-text">Instagram · @handle</li><li class="ph-text">TikTok · @handle</li></ul></div>
+    </div>
+    <div class="disclaimer">
+      <p>Roamly is a fictional concept brand. Prices, itineraries and profiles are illustrative. Photos: Unsplash.</p>
+      <nav aria-label="Legal"><a href="#privacy" id="privacyLink">Privacy Policy</a><a href="#terms" id="termsLink">Terms</a><span>© <span id="yr">2026</span></span></nav>
+    </div>
+  </div>
+</footer>
+
+<dialog class="dest" id="destDlg" aria-labelledby="dlgTitle"></dialog>
+<dialog class="dest" id="legalDlg" aria-labelledby="legalTitle"></dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const DEST={
+    cape:{name:'Cape Town',country:'South Africa',img:'img/cape.webp',alt:'Aerial view of Cape Town with Table Mountain and the Atlantic coastline',cat:'Coast & mountain',coord:'33.92°S · 18.42°E',price:650,best:'Nov–Mar',desc:'Coastal escapes and mountain adventures.',
+      highlights:['Table Mountain and the Twelve Apostles','Bo-Kaap and city neighbourhoods','Cape Peninsula viewpoints','Winelands day trip (add-on)'],len:'4–6 nights',pace:'Active'},
+    marrakech:{name:'Marrakech',country:'Morocco',img:'img/marrakech.webp',alt:'The Koutoubia minaret above Marrakech with the snowy Atlas Mountains behind',cat:'Culture & food',coord:'31.63°N · 7.99°W',price:480,best:'Mar–May · Sep–Nov',desc:'Culture, markets, architecture and food.',
+      highlights:['Medina souks with a local guide','Riad stay in the old city','Cooking class and rooftop dinners','Atlas Mountains day trip'],len:'3–5 nights',pace:'Easy'},
+    bali:{name:'Bali',country:'Indonesia',img:'img/bali.webp',alt:'Terraced green rice fields and palm trees near Ubud, Bali',cat:'Nature & retreat',coord:'8.51°S · 115.26°E',price:720,best:'Apr–Oct',desc:'Tropical retreats, temples and nature.',
+      highlights:['Ubud rice terraces','Sunset at a sea temple','Villa with a private pool','Cooking or wellness day'],len:'6–9 nights',pace:'Slow'},
+    zanzibar:{name:'Zanzibar',country:'Tanzania',img:'img/zanzibar.webp',alt:'White-sand beach with clear turquoise water and a small boat',cat:'Island & beach',coord:'6.16°S · 39.19°E',price:550,best:'Jun–Oct · Dec–Feb',desc:'Island relaxation, beaches and local culture.',
+      highlights:['Stone Town walking tour','Spice farm visit','Dhow sunset sail','East-coast beach days'],len:'5–7 nights',pace:'Very relaxed'}
+  };
+  const ORDER=['cape','marrakech','bali','zanzibar'];
+  const STYLES=[
+    {id:'beach',label:'Beach & Relaxation',desc:'Warm water, nowhere to be.',img:'img/s-beach.webp'},
+    {id:'adventure',label:'Adventure & Outdoors',desc:'Hikes, views, adrenaline.',img:'img/s-adventure.webp'},
+    {id:'culture',label:'Culture & Food',desc:'Markets, history, great meals.',img:'img/s-culture.webp'},
+    {id:'romantic',label:'Romantic Getaway',desc:'Sunsets and slow mornings.',img:'img/s-romantic.webp'},
+    {id:'group',label:'Friends & Group Trips',desc:'Shared stays, shared plans.',img:'img/s-group.webp'}
+  ];
+  const SCORE={beach:{zanzibar:3,bali:2,cape:1},adventure:{cape:3,bali:2,marrakech:1},culture:{marrakech:3,cape:1,bali:1,zanzibar:1},romantic:{bali:3,zanzibar:2,marrakech:1},group:{cape:2,marrakech:2,bali:1}};
+  const FIT={cape:'Mountains, coastline and great food in one city.',marrakech:'Markets, riads and long dinners. Easy for groups.',bali:'Rice terraces, temples and sunsets.',zanzibar:'Turquoise water and island pace.'};
+
+  const track=$('#dtrack');
+  ORDER.forEach((k,i)=>{const d=DEST[k];const a=document.createElement('article');a.className='dcard';a.id='d-'+k;
+    a.innerHTML=`<div class="ph"><img src="${d.img}" alt="${d.alt}" loading="lazy" width="1000" height="667"></div>
+    <div class="dtop"><span class="tag">${d.cat}</span><span class="dnum">0${i+1} / 04</span></div>
+    <div class="dbody"><p class="coord">${d.coord}</p><h3>${d.name}</h3><p class="country">${d.country}</p><p class="desc">${d.desc}</p>
+    <div class="dmeta"><p class="price">$${d.price}<small> pp from*</small></p><p class="best">BEST<br>${d.best}</p></div>
+    <div class="dact"><button class="btn btn-sun btn-sm" type="button" data-explore="${k}">Explore Destination</button><button class="btn btn-ghost btn-sm" type="button" data-prefill="${k}" aria-label="Plan a trip to ${d.name}">Plan this</button></div></div>`;
+    track.appendChild(a);});
+  const end=document.createElement('div');end.className='dcard end dark';
+  end.innerHTML='<p class="eyebrow">Can\'t choose?</p><h3>Let us match you.</h3><p>Pick your travel style and we\'ll find your place.</p><a class="btn btn-sun" href="#styles">Find My Trip <span class="arr" aria-hidden="true">→</span></a>';
+  track.appendChild(end);
+
+  const dlg=$('#destDlg');let lastFocus=null;
+  function openDest(k){const d=DEST[k];lastFocus=document.activeElement;
+    dlg.innerHTML=`<div class="dlg-ph"><img src="${d.img}" alt="${d.alt}"><div class="cap"><p class="mono">${d.coord}</p><h2 id="dlgTitle">${d.name}</h2><p>${d.country} · ${d.cat}</p></div></div>
+    <button class="dlg-close" type="button" aria-label="Close ${d.name} details"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <div class="dlg-b"><div class="dlg-cols"><div><h3>Highlights</h3><ul>${d.highlights.map(h=>`<li>${h}</li>`).join('')}</ul></div>
+    <div><h3>At a glance</h3><dl class="dlg-facts"><div><dt>From*</dt><dd>$${d.price} pp</dd></div><div><dt>Length</dt><dd>${d.len}</dd></div><div><dt>Pace</dt><dd>${d.pace}</dd></div><div><dt>Best months</dt><dd>${d.best}</dd></div></dl></div></div>
+    <div class="dlg-act"><button class="btn btn-sun" type="button" data-prefill="${k}">Plan a trip to ${d.name} <span class="arr" aria-hidden="true">→</span></button>${k==='cape'?'<button class="btn btn-ghost" type="button" data-goto="experiences">See 5-day itinerary</button>':''}</div>
+    <p class="fine">*Illustrative price, excludes flights.</p></div>`;
+    dlg.showModal();$('.dlg-close',dlg).focus();}
+  [dlg,$('#legalDlg')].forEach(el=>{
+    el.addEventListener('click',e=>{if(e.target===el||e.target.closest('.dlg-close')||e.target.closest('[data-close]'))el.close();});
+    el.addEventListener('close',()=>{if(lastFocus&&document.contains(lastFocus))lastFocus.focus();});});
+  function openLegal(kind){const L=$('#legalDlg');lastFocus=document.activeElement;const t=kind==='privacy'?'Privacy Policy':'Terms';
+    L.innerHTML=`<button class="dlg-close" type="button" aria-label="Close" style="background:var(--paper)"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><div class="dlg-b" style="padding-top:32px"><h2 id="legalTitle" style="font-size:44px">${t}</h2><p>Placeholder. This prototype doesn't store or send anything you type, and makes no booking or payment commitments.</p><div class="dlg-act"><button class="btn btn-ink" type="button" data-close>Close</button></div></div>`;
+    L.showModal();$('.dlg-close',L).focus();}
+  $('#privacyLink').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openLegal('privacy')});
+  $('#termsLink').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openLegal('terms')});
+
+  const burger=$('#burger'),mnav=$('#mnav'),navshell=$('#navshell');
+  mnav.inert=true;
+  function setNav(open){burger.setAttribute('aria-expanded',open);$('#menuLabel').textContent=open?'Close':'Menu';mnav.classList.toggle('open',open);mnav.inert=!open;document.body.style.overflow=open?'hidden':'';navshell.classList.remove('hide');if(open)setTimeout(()=>$('a',mnav).focus({preventScroll:true}),300);}
+  burger.addEventListener('click',()=>setNav(burger.getAttribute('aria-expanded')!=='true'));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&mnav.classList.contains('open')){setNav(false);burger.focus();}});
+  matchMedia('(min-width:960px)').addEventListener('change',m=>{if(m.matches)setNav(false);});
+
+  /* pill: hide on scroll down, show on scroll up */
+  let lastY=scrollY;addEventListener('scroll',()=>{const y=scrollY;if(!mnav.classList.contains('open')&&!navshell.contains(document.activeElement)){navshell.classList.toggle('hide',y>lastY&&y>window.innerHeight*.9);}lastY=y;},{passive:true});
+  navshell.addEventListener('focusin',()=>navshell.classList.remove('hide'));
+
+  /* pill: sliding blob + active-section dot */
+  const linksEl=$('#links'),blob=$('.blob',linksEl),ndot=$('.dot',linksEl),navLinks=$$('a',linksEl);
+  function moveTo(el,which){if(!el){which.style.opacity=0;return;}const r=el.getBoundingClientRect(),pr=linksEl.getBoundingClientRect();
+    if(which===blob){blob.style.width=r.width+'px';blob.style.transform=`translateX(${r.left-pr.left}px)`;}else{ndot.style.transform=`translateX(${r.left-pr.left+r.width/2-2.5}px)`;}which.style.opacity=1;}
+  let activeLink=null;
+  navLinks.forEach(a=>{a.addEventListener('mouseenter',()=>moveTo(a,blob));a.addEventListener('focus',()=>moveTo(a,blob));});
+  linksEl.addEventListener('mouseleave',()=>moveTo(activeLink,blob));
+  const spy=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){activeLink=navLinks.find(a=>a.getAttribute('href')==='#'+e.target.id)||null;navLinks.forEach(a=>a.classList.toggle('active',a===activeLink));moveTo(activeLink,ndot);if(!linksEl.matches(':hover'))moveTo(activeLink,blob);}});},{rootMargin:'-45% 0px -50% 0px'});
+  ['destinations','experiences','how','about'].forEach(id=>{const el=document.getElementById(id);el&&spy.observe(el);});
+  const topObs=new IntersectionObserver(([e])=>{if(e.isIntersecting){activeLink=null;navLinks.forEach(a=>a.classList.remove('active'));moveTo(null,ndot);moveTo(null,blob);}},{rootMargin:'0px 0px -60% 0px'});topObs.observe($('#top'));
+
+  /* hero film: chapters + pause */
+  const vid=$('#heroVid'),chapName=$('#chapName'),chapCoord=$('#chapCoord'),ring=$('#ringFill'),vidBtn=$('#vidBtn');
+  const CH=[[0,'cape'],[5.2,'marrakech'],[8,'bali'],[13.6,'zanzibar']];
+  const COORD={cape:'33.9°S',marrakech:'31.6°N',bali:'8.5°S',zanzibar:'6.2°S'};let curCh='cape';
+  function tick(){if(vid.duration){const t=vid.currentTime;let c=CH[0][1];CH.forEach(([s,k])=>{if(t>=s)c=k;});
+      ring.style.strokeDashoffset=81.7*(1-t/vid.duration);
+      if(c!==curCh){curCh=c;chapName.textContent=DEST[c].name;chapCoord.textContent=COORD[c];chapName.classList.remove('swap');void chapName.offsetWidth;chapName.classList.add('swap');}}
+    requestAnimationFrame(tick);}
+  requestAnimationFrame(tick);
+  function setPlay(play){if(play){const p=vid.play();p&&p.catch(()=>{});}else vid.pause();vidBtn.setAttribute('aria-label',play?'Pause background film':'Play background film');
+    $('#vidIco').innerHTML=play?'<rect x="2" y="1" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="8.5" y="1" width="3.5" height="12" rx="1" fill="currentColor"/>':'<path d="M3 1.5v11l9.5-5.5z" fill="currentColor"/>';}
+  vidBtn.addEventListener('click',()=>setPlay(vid.paused));
+  if(reduce){setPlay(false);}
+  else{const p=vid.play();p&&p.catch(()=>setPlay(false));}
+
+  /* cursor label (desktop) */
+  if(matchMedia('(pointer:fine)').matches&&!reduce){const cur=$('#cur'),ct=$('#curTxt');let x=0,y=0,cx=0,cy=0;
+    addEventListener('pointermove',e=>{x=e.clientX;y=e.clientY;cur.classList.add('on');const t=e.target.closest&&e.target.closest('.dcard:not(.end) .ph, .dcard:not(.end) .dtop, .sopt, .profile .pph');
+      if(t){ct.textContent=t.closest('.sopt')?(t.getAttribute('aria-pressed')==='true'?'Remove':'Select'):t.closest('.profile')?'Sample':'Explore';cur.classList.add('big');}else cur.classList.remove('big');},{passive:true});
+    document.addEventListener('pointerleave',()=>cur.classList.remove('on'));
+    (function loop(){cx+=(x-cx)*.2;cy+=(y-cy)*.2;cur.style.transform=`translate(${cx}px,${cy}px)`;requestAnimationFrame(loop);})();
+    document.addEventListener('click',e=>{const ph=e.target.closest('.dcard:not(.end) .ph');if(ph){const k=ph.closest('.dcard').id.slice(2);openDest(k);}});}
+
+  function goTo(target,focusEl){const el=typeof target==='string'?document.getElementById(target):target;if(!el)return;
+    let y=el.getBoundingClientRect().top+scrollY-76;
+    if(window.ScrollTrigger){const st=ScrollTrigger.getById('destpin');if(st&&el.id==='destinations')y=st.start;}
+    window.scrollTo({top:y,behavior:reduce?'auto':'smooth'});
+    if(focusEl)setTimeout(()=>focusEl.focus({preventScroll:true}),reduce?0:900);}
+
+  const sgrid=$('#sgrid'),checks=$('#styleChecks');const selected=new Set();
+  STYLES.forEach(s=>{const li=document.createElement('li');
+    li.innerHTML=`<button class="sopt" type="button" aria-pressed="false" data-style="${s.id}"><img src="${s.img}" alt="" loading="lazy"><span class="chk" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="sb"><b>${s.label}</b><span>${s.desc}</span></span></button>`;
+    sgrid.appendChild(li);
+    const l=document.createElement('label');l.innerHTML=`<input type="checkbox" name="styles" value="${s.id}" id="cs-${s.id}"> ${s.label}`;checks.appendChild(l);});
+  const prompt=$('#prompt'),result=$('#result'),selCount=$('#selCount'),clearBtn=$('#clearBtn');
+  function syncSel(){selCount.textContent=selected.size+' selected';clearBtn.hidden=!selected.size;if(selected.size)prompt.textContent='';}
+  sgrid.addEventListener('click',e=>{const b=e.target.closest('.sopt');if(!b)return;const id=b.dataset.style;
+    if(selected.has(id)){selected.delete(id);b.setAttribute('aria-pressed','false');}else{selected.add(id);b.setAttribute('aria-pressed','true');}syncSel();});
+  clearBtn.addEventListener('click',()=>{selected.clear();$$('.sopt').forEach(b=>b.setAttribute('aria-pressed','false'));result.innerHTML='';syncSel();$('.sopt').focus();refresh();});
+  $('#findBtn').addEventListener('click',()=>{
+    if(!selected.size){result.innerHTML='';prompt.textContent='Pick at least one travel style first.';sgrid.classList.remove('shake');void sgrid.offsetWidth;sgrid.classList.add('shake');refresh();return;}
+    const tot={cape:0,marrakech:0,bali:0,zanzibar:0};selected.forEach(s=>Object.entries(SCORE[s]).forEach(([k,v])=>tot[k]+=v));
+    const r=ORDER.slice().sort((a,b)=>tot[b]-tot[a]||ORDER.indexOf(a)-ORDER.indexOf(b));const k=r[0],d=DEST[k];
+    const labels=STYLES.filter(s=>selected.has(s.id)).map(s=>s.label);
+    result.innerHTML=`<article class="result" aria-labelledby="rec-h"><div class="rph"><img src="${d.img}" alt="${d.alt}"></div><div class="rb">
+      <p class="eyebrow">Your best match</p><h3 id="rec-h" tabindex="-1">${d.name}</h3>
+      <p class="why-fit">${FIT[k]} From <b style="color:var(--ink)">$${d.price} pp*</b> · best ${d.best}</p>
+      <ul class="chips" aria-label="Your styles">${labels.map(l=>`<li>${l}</li>`).join('')}</ul>
+      <div class="dact"><button class="btn btn-sun" type="button" data-prefill="${k}" data-withstyles>Use in my enquiry <span class="arr" aria-hidden="true">→</span></button><button class="btn btn-ghost" type="button" data-explore="${k}">Explore ${d.name}</button></div>
+      <p class="also">Also great: <button class="link" type="button" data-explore="${r[1]}">${DEST[r[1]].name}</button></p></div></article>`;
+    refresh();$('#rec-h').focus({preventScroll:true});goTo(result);});
+
+  const when=$('#f-when');const now=new Date();
+  for(let i=1;i<=14;i++){const d=new Date(now.getFullYear(),now.getMonth()+i,1);const o=document.createElement('option');o.value=o.textContent=d.toLocaleString('en-US',{month:'long',year:'numeric'});when.appendChild(o);}
+  const fl=document.createElement('option');fl.value=fl.textContent='Flexible';when.appendChild(fl);
+
+  const prefilled=$('#prefilled');
+  function prefill(k,withStyles){showForm();
+    if(k&&DEST[k])$('#f-dest').value=k;
+    if(withStyles&&selected.size)$$('#styleChecks input').forEach(i=>i.checked=selected.has(i.value));
+    const parts=[];if(k&&DEST[k])parts.push(DEST[k].name);if(withStyles&&selected.size)parts.push(selected.size+' style'+(selected.size>1?'s':''));
+    if(parts.length){prefilled.textContent='Pre-filled: '+parts.join(' + ');prefilled.hidden=false;}
+    clearErr('dest');clearErr('styles');if(dlg.open)dlg.close();goTo('enquire',$('#f-name'));}
+  document.addEventListener('click',e=>{
+    const p=e.target.closest('[data-prefill]');if(p){e.preventDefault();prefill(p.dataset.prefill,p.hasAttribute('data-withstyles'));return;}
+    const x=e.target.closest('[data-explore]');if(x){openDest(x.dataset.explore);return;}
+    const g=e.target.closest('[data-goto]');if(g){dlg.close();goTo(g.dataset.goto);return;}
+    const pl=e.target.closest('[data-plan]');if(pl){e.preventDefault();setNav(false);showForm();goTo('enquire',$('#f-name'));return;}
+    const a=e.target.closest('a[href^="#"]');if(a&&a.getAttribute('href').length>1){const t=document.getElementById(a.getAttribute('href').slice(1));if(t){e.preventDefault();setNav(false);goTo(t);}}
+  });
+
+  const form=$('#enqForm'),esum=$('#esum'),success=$('#success'),submitBtn=$('#submitBtn');
+  const LABEL={name:'Full name',email:'Email',dest:'Destination',when:'Travel month',pax:'Travelers',budget:'Budget',styles:'Travel style'};
+  function setErr(f,msg){const el=$('#e-'+f);el.textContent=msg;el.hidden=false;if(f==='styles')checks.classList.add('invalid');else $('#f-'+f).setAttribute('aria-invalid','true');}
+  function clearErr(f){const el=$('#e-'+f);if(el){el.hidden=true;el.textContent='';}if(f==='styles')checks.classList.remove('invalid');else{const i=$('#f-'+f);i&&i.removeAttribute('aria-invalid');}}
+  function validate(){const v={},errs=[];
+    v.name=$('#f-name').value.trim();v.email=$('#f-email').value.trim();v.dest=$('#f-dest').value;v.when=$('#f-when').value;v.pax=$('#f-pax').value.trim();v.budget=$('#f-budget').value;v.styles=$$('#styleChecks input:checked').map(i=>i.value);
+    if(v.name.length<2)errs.push(['name','Enter your full name.']);
+    if(!v.email)errs.push(['email','Enter your email address.']);else if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email))errs.push(['email','Use a valid email, like name@example.com.']);
+    if(!v.dest)errs.push(['dest','Choose a destination, or "Not sure yet".']);
+    if(!v.when)errs.push(['when','Choose a month, or "Flexible".']);
+    const n=Number(v.pax);if(!v.pax||!Number.isInteger(n)||n<1)errs.push(['pax','Enter at least 1 traveler.']);else if(n>20)errs.push(['pax','Max 20. Mention larger groups below.']);
+    if(!v.budget)errs.push(['budget','Choose a budget range.']);
+    if(!v.styles.length)errs.push(['styles','Pick at least one style.']);
+    return {v,errs};}
+  ['name','email','dest','when','pax','budget'].forEach(f=>{const i=$('#f-'+f);const re=()=>{if(i.getAttribute('aria-invalid')==='true'){const m=validate().errs.find(e=>e[0]===f);m?setErr(f,m[1]):clearErr(f);}};i.addEventListener('input',re);i.addEventListener('change',re);});
+  checks.addEventListener('change',()=>{if($$('#styleChecks input:checked').length)clearErr('styles');});
+  form.addEventListener('submit',e=>{e.preventDefault();Object.keys(LABEL).forEach(clearErr);
+    const {v,errs}=validate();
+    if(errs.length){errs.forEach(([f,m])=>setErr(f,m));
+      esum.innerHTML=`<h3>Fix ${errs.length} ${errs.length===1?'field':'fields'} to send</h3><ul>${errs.map(([f])=>`<li><a href="#" data-field="${f}">${LABEL[f]}</a></li>`).join('')}</ul>`;
+      esum.hidden=false;esum.focus();refresh();return;}
+    esum.hidden=true;submitBtn.disabled=true;submitBtn.innerHTML='<span class="spin" aria-hidden="true"></span>Sending…';
+    setTimeout(()=>{const d=DEST[v.dest];const st=STYLES.filter(s=>v.styles.includes(s.id)).map(s=>s.label).join(', ');
+      success.innerHTML=`<div class="seal" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>You're all set, ${esc(v.name.split(/\s+/)[0])}.</h3>
+        <p style="color:var(--ink-2)">A planner would email <b style="color:var(--ink)">${esc(v.email)}</b> with 2–3 options. Nothing is booked until you confirm.</p>
+        <dl class="summary"><dt>Where</dt><dd>${esc(d?d.name:'Not sure yet')}</dd><dt>When</dt><dd>${esc(v.when)}</dd><dt>Who</dt><dd>${esc(v.pax)} traveler${v.pax==1?'':'s'}</dd><dt>Budget</dt><dd>${esc(v.budget)} pp</dd><dt>Style</dt><dd>${esc(st)}</dd></dl>
+        <p class="notice">Demo only · this enquiry was not sent</p>
+        <div class="dact"><button class="btn btn-ink" type="button" id="againBtn">New enquiry</button><a class="btn btn-ghost" href="#destinations">Keep exploring</a></div>`;
+      form.hidden=true;success.hidden=false;success.focus();submitBtn.disabled=false;submitBtn.innerHTML='Send My Trip Enquiry <span class="arr" aria-hidden="true">→</span>';
+      $('#againBtn').addEventListener('click',()=>{form.reset();$('#f-pax').value=2;prefilled.hidden=true;showForm();$('#f-name').focus();refresh();});
+      refresh();
+    },reduce?150:900);});
+  esum.addEventListener('click',e=>{const a=e.target.closest('[data-field]');if(!a)return;e.preventDefault();e.stopPropagation();const f=a.dataset.field;(f==='styles'?$('#styleChecks input'):$('#f-'+f)).focus();});
+  function showForm(){form.hidden=false;success.hidden=true;}
+  function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function refresh(){if(window.ScrollTrigger)requestAnimationFrame(()=>ScrollTrigger.refresh());}
+  $('#yr').textContent=new Date().getFullYear();
+
+  /* ---------- MOTION ---------- */
+  if(reduce||!window.gsap||!window.ScrollTrigger)return;
+  gsap.registerPlugin(ScrollTrigger);
+  document.documentElement.classList.add('anim');
+
+  $$('[data-split]').forEach(h=>{
+    const walk=node=>{[...node.childNodes].forEach(n=>{
+      if(n.nodeType===3){const frag=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(part=>{
+        if(!part)return;if(/^\s+$/.test(part)){frag.appendChild(document.createTextNode(part));return;}
+        const w=document.createElement('span');w.className='w';const i=document.createElement('span');i.textContent=part;w.appendChild(i);frag.appendChild(w);});
+        n.replaceWith(frag);}else if(n.nodeType===1)walk(n);});};
+    walk(h);});
+
+
+  // hero: "roam" cutout opens into the film
+  const stage=$('#stage'),cutSvg=$('#cutSvg'),roam=$('#roamText');
+  stage.classList.add('intro');
+  function fitCut(){const port=innerWidth/innerHeight<1;cutSvg.setAttribute('viewBox',port?'250 0 1100 900':'0 0 1600 900');}
+  fitCut();
+  function setOrigin(){fitCut();try{const m=roam.getExtentOfChar(3);const fs=560;const ux=m.x+m.width*.5,uy=610-fs*.2;
+      const ctm=cutSvg.getScreenCTM(),sr=cutSvg.getBoundingClientRect();const px=ctm.a*ux+ctm.e-sr.left,py=ctm.d*uy+ctm.f-sr.top;
+      cutSvg.style.transformOrigin=`${px}px ${py}px`;}catch(e){cutSvg.style.transformOrigin='50% 55%';}}
+  setOrigin();if(document.fonts)document.fonts.ready.then(()=>{setOrigin();ScrollTrigger.refresh();});
+  gsap.set('#heroCopy',{autoAlpha:0});
+  gsap.from(roam,{attr:{y:900},duration:1.4,ease:'expo.out',delay:.1});
+  gsap.from('#introCopy .row',{y:24,opacity:0,duration:1,ease:'expo.out',stagger:.12,delay:.4});
+  const htl=gsap.timeline({scrollTrigger:{trigger:'#stage',start:'top top',end:'+=130%',pin:true,scrub:.8,anticipatePin:1,onRefresh:setOrigin}});
+  htl.to('#introCopy',{opacity:0,y:-30,duration:.18,ease:'none'},0)
+     .to(cutSvg,{scale:42,duration:1,ease:'power3.in'},0)
+     .to('#cutRect',{opacity:0,duration:.2,ease:'none'},.8)
+     .fromTo('#heroVid',{scale:1.25},{scale:1,duration:1,ease:'power2.out'},0)
+     .to('#heroCopy',{autoAlpha:1,duration:.01},.85)
+     .from('#hero-h .w>span',{yPercent:115,rotate:5,duration:.3,stagger:.025,ease:'power3.out'},.86)
+     .from('#heroCopy [data-fade]',{y:30,opacity:0,duration:.25,stagger:.04,ease:'power3.out'},.92)
+     .to({},{duration:.25});
+  // marquee reacts to scroll speed
+  const row=$('.marquee .row');
+  ScrollTrigger.create({onUpdate:self=>{const v=self.getVelocity();gsap.to(row,{skewX:gsap.utils.clamp(-10,10,v/-250),duration:.5,overwrite:'auto'});row.style.animationDuration=(36/(1+Math.min(Math.abs(v)/500,5)))+'s';}});
+
+  // headings: word reveal
+  $$('[data-split]').forEach(h=>{if(h.id==='hero-h')return;
+    gsap.from($$('.w>span',h),{yPercent:115,duration:1.1,ease:'expo.out',stagger:.05,scrollTrigger:{trigger:h,start:'top 88%'}});});
+
+  // generic staggers
+  $$('[data-stagger]').forEach(g=>gsap.from(g.children,{y:70,opacity:0,duration:1.1,ease:'expo.out',stagger:.1,scrollTrigger:{trigger:g,start:'top 85%'}}));
+  ScrollTrigger.batch('.sopt',{start:'top 90%',once:true,onEnter:els=>gsap.from(els,{y:80,scale:.92,opacity:0,duration:1,ease:'expo.out',stagger:.08})});
+
+  const mm=gsap.matchMedia();
+  mm.add('(min-width:1024px)',()=>{
+    const wrap=$('#dtrackWrap');
+    const dist=()=>Math.max(0,track.scrollWidth-wrap.clientWidth+40);
+    const tween=gsap.to(track,{x:()=>-dist(),ease:'none',scrollTrigger:{id:'destpin',trigger:'#destPin',start:'top top+=69',end:()=>'+='+dist(),pin:true,scrub:1,invalidateOnRefresh:true,anticipatePin:1}});
+    $$('.dcard .ph img',track).forEach(img=>gsap.fromTo(img,{xPercent:-6},{xPercent:6,ease:'none',scrollTrigger:{trigger:img.closest('.dcard'),containerAnimation:tween,start:'left right',end:'right left',scrub:true}}));
+    $$('.dcard h3',track).forEach(h=>gsap.from(h,{x:80,opacity:0,ease:'none',scrollTrigger:{trigger:h.closest('.dcard'),containerAnimation:tween,start:'left 95%',end:'left 55%',scrub:true}}));
+  });
+  gsap.from('.dcard',{y:100,opacity:0,rotate:2,duration:1.2,ease:'expo.out',stagger:.08,scrollTrigger:{trigger:'#dtrackWrap',start:'top 88%'}});
+
+  // featured image reveal
+  gsap.fromTo('#featImg',{clipPath:'inset(16% 14% 16% 14% round 8px)'},{clipPath:'inset(0% 0% 0% 0% round 8px)',ease:'none',scrollTrigger:{trigger:'#experiences',start:'top 90%',end:'top 20%',scrub:true}});
+  gsap.fromTo('#featImg img',{scale:1.35},{scale:1,ease:'none',scrollTrigger:{trigger:'#experiences',start:'top bottom',end:'center center',scrub:true}});
+  // itinerary route
+  gsap.fromTo('#itinFill',{scaleY:0},{scaleY:1,ease:'none',scrollTrigger:{trigger:'#itin',start:'top 70%',end:'bottom 55%',scrub:true}});
+  $$('#itin li').forEach(li=>ScrollTrigger.create({trigger:li,start:'top 68%',onEnter:()=>li.classList.add('on'),onLeaveBack:()=>li.classList.remove('on')}));
+
+  // flight path + plane
+  const path=$('#flightPath'),fw=$('#flight'),plane=$('#plane');
+  mm.add('(min-width:880px)',()=>{
+    const L=path.getTotalLength();gsap.set(path,{strokeDasharray:L,strokeDashoffset:L});
+    const place=p=>{const a=path.getPointAtLength(L*p),b=path.getPointAtLength(Math.min(L,L*p+2));const sx=fw.clientWidth/1200,sy=fw.clientHeight/90;
+      const ang=Math.atan2((b.y-a.y)*sy,(b.x-a.x)*sx)*180/Math.PI;plane.style.transform=`translate(${a.x*sx-15}px,${a.y*sy-15}px) rotate(${ang}deg)`;};
+    const o={p:0};place(0);
+    const tl=gsap.timeline({scrollTrigger:{trigger:'#how',start:'top 75%',end:'center 45%',scrub:1}});
+    tl.to(path,{strokeDashoffset:0,ease:'none'},0).to(o,{p:1,ease:'none',onUpdate:()=>place(o.p)},0);
+    return()=>{gsap.set(path,{clearProps:'all'});};
+  });
+  gsap.from('.step .n',{scale:.2,rotate:-20,opacity:0,duration:1.1,ease:'back.out(2.2)',stagger:.15,scrollTrigger:{trigger:'.steps',start:'top 82%'}});
+
+  // benefit cards fan in
+  gsap.from('.benefit',{rotate:i=>[-8,4,-4,8][i],y:140,opacity:0,duration:1.3,ease:'expo.out',stagger:.09,scrollTrigger:{trigger:'#benefits',start:'top 88%'}});
+
+  // ledger rows tick in
+  gsap.from('.ledger li',{x:-24,opacity:0,duration:.6,ease:'power3.out',stagger:.05,scrollTrigger:{trigger:'.ledger',start:'top 75%'}});
+
+  // profile parallax
+  $$('[data-parallax]').forEach(img=>gsap.fromTo(img,{yPercent:-14},{yPercent:0,ease:'none',scrollTrigger:{trigger:img.parentElement,start:'top bottom',end:'bottom top',scrub:true}}));
+
+  // final CTA
+  gsap.fromTo('#finalBg',{scale:1.4},{scale:1,ease:'none',scrollTrigger:{trigger:'.final',start:'top bottom',end:'bottom bottom',scrub:true}});
+  gsap.from('[data-fade-in]',{y:30,opacity:0,scale:.9,duration:1,ease:'back.out(2)',scrollTrigger:{trigger:'.final',start:'top 45%'}});
+
+
+  // ---------- MASSIVE 1: journey map ----------
+  (function(){
+    const cam=$('#jrCam'),map=$('#jrMap'),plane=$('#jrPlane'),cards=$$('.jr-card'),steps=$$('#jrSteps li');
+    const PT={marrakech:[182,129.5],cape:[449.6,793.7],zanzibar:[660.1,512.4],bali:[1430.2,535.2]};
+    const ORDERJ=['marrakech','cape','zanzibar','bali'];
+    const segs=[1,2,3].map(i=>$('#seg'+i));const lens=segs.map(p=>p.getTotalLength());
+    segs.forEach((p,i)=>gsap.set(p,{strokeDasharray:lens[i],strokeDashoffset:lens[i]}));
+    const C={x:806,y:461,k:1};
+    function vis(){const r=map.getBoundingClientRect(),a=r.width/r.height;return a>=16/9?[1600,1600/a]:[900*a,900];}
+    function over(){const [w,h]=vis();return w<700?Math.min(w/1320,h/700):Math.min(w/1460,h/880)*.9;}
+    function ovC(){const [w,h]=vis(),k=over();return w<700?{x:806,y:461-h*.05/k,k}:{x:806-w*.07/k,y:461-h*.09/k,k};}
+    function stopK(){const [w]=vis();return over()*(w<700?2.6:2.3);}
+    function at(k){const [w,h]=vis();const mob=w<700;const kk=stopK();const [x,y]=PT[k];return {x:x+(mob?0:w*.16/kk),y:y+(mob?h*.14/kk:h*.04/kk),k:kk};}
+    function apply(){cam.setAttribute('transform',`translate(800 450) scale(${C.k}) translate(${-C.x} ${-C.y})`);}
+    Object.assign(C,ovC());apply();
+    function planeOn(i,p){const L=lens[i],a=segs[i].getPointAtLength(L*p),b=segs[i].getPointAtLength(Math.min(L,L*p+1.5));
+      const ang=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI;plane.setAttribute('transform',`translate(${a.x} ${a.y}) rotate(${ang}) scale(${1.1/Math.max(C.k,.5)})`);}
+    const tl=gsap.timeline({defaults:{ease:'power2.inOut'},scrollTrigger:{trigger:'#jrStage',start:'top top',end:()=>'+='+innerHeight*4.2,pin:true,scrub:1,invalidateOnRefresh:true,anticipatePin:1,
+      onUpdate:self=>{const t=tl.time();let idx=-1;MARKS.forEach((m,i)=>{if(t>=m)idx=i;});steps.forEach((li,i)=>li.classList.toggle('on',i===idx||(idx===4)));}}});
+    const MARKS=[];
+    const camTo=(fn,d,pos)=>tl.to(C,{x:()=>fn().x,y:()=>fn().y,k:()=>fn().k,duration:d,onUpdate:apply},pos);
+    const showCard=(i,pos)=>{tl.to(cards.filter((c,j)=>j!==i),{autoAlpha:0,y:20,duration:.3},pos);tl.fromTo(cards[i],{autoAlpha:0,y:40},{autoAlpha:1,y:0,duration:.45,ease:'power3.out'},pos+.15);};
+    tl.to('.jr-head',{autoAlpha:0,y:-30,duration:.6},.2);
+    camTo(()=>at('marrakech'),1,0);
+    tl.to('#mk-marrakech .halo',{attr:{r:40},opacity:.3,duration:.5},.6);
+    MARKS.push(.7);showCard(0,.6);
+    tl.set(plane,{opacity:1},1);tl.add(()=>planeOn(0,0),1);
+    let t0=1.4;
+    for(let i=0;i<3;i++){
+      const from=ORDERJ[i],to=ORDERJ[i+1],o={p:0};
+      const mid=()=>{const a=at(from),b=at(to);return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,k:Math.min(a.k,b.k)*.62};};
+      tl.to(cards,{autoAlpha:0,y:20,duration:.3},t0);
+      camTo(mid,.8,t0);camTo(()=>at(to),.8,t0+.8);
+      tl.to(segs[i],{strokeDashoffset:0,duration:1.6,ease:'none'},t0);
+      tl.to(o,{p:1,duration:1.6,ease:'none',onUpdate:()=>planeOn(i,o.p)},t0);
+      tl.to('#mk-'+to+' .halo',{attr:{r:40},opacity:.3,duration:.5},t0+1.3);
+      MARKS.push(t0+1.4);showCard(i+1,t0+1.4);
+      t0+=2.6;
+    }
+    tl.to(plane,{opacity:0,duration:.3},t0);
+    tl.to(cards,{autoAlpha:0,y:20,duration:.3},t0);
+    camTo(()=>{const [w,h]=vis();const k=over();return {x:806+(w<700?0:w*.12/k),y:461+(w<700?h*.14/k:0),k:k};},1.1,t0);
+    MARKS.push(t0+.5);showCard(4,t0+.6);
+    tl.to({},{duration:.6});
+  })();
+
+  // ---------- MASSIVE 2: collage zoom ----------
+  (function(){
+    const mob=()=>innerWidth<720;
+    gsap.set('#clCenter',{clipPath:()=>mob()?'inset(33% 22% 33% 22% round 14px)':'inset(28% 37% 28% 37% round 14px)'});
+    gsap.set('#clOver',{autoAlpha:0,y:30});
+    const tiles=$$('#clTiles .tile');
+    tiles.forEach((t,i)=>gsap.from(t,{y:()=>innerHeight*.25*(i%2?1:-1),opacity:0,scale:.8,ease:'none',scrollTrigger:{trigger:'#collage',start:'top bottom',end:'top top',scrub:true}}));
+    const tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:'#clStage',start:'top top',end:()=>'+='+innerHeight*2.4,pin:true,scrub:1,invalidateOnRefresh:true,anticipatePin:1}});
+    tl.to('#clCenter',{clipPath:'inset(0% 0% 0% 0% round 0px)',duration:1,ease:'power2.inOut'},0)
+      .fromTo('#clCenter img',{scale:1.35},{scale:1,duration:1,ease:'power2.inOut'},0)
+      .to('.cl-l',{xPercent:-70,duration:1,ease:'power2.in'},.05)
+      .to('.cl-r',{xPercent:70,duration:1,ease:'power2.in'},.05)
+      .to('.cl-words',{autoAlpha:0,duration:.25},.75);
+    tiles.forEach(t=>{const x=+t.style.getPropertyValue('--x'),y=+t.style.getPropertyValue('--y');
+      tl.to(t,{x:()=>(x-50)/50*innerWidth*.55,y:()=>(y-50)/50*innerHeight*.55,scale:1.5,rotate:(x-50)/10,opacity:0,duration:.9,ease:'power2.in'},0);});
+    tl.to('#clOver',{autoAlpha:1,y:0,duration:.3,ease:'power3.out'},1).to({},{duration:.35});
+  })();
+
+  // extra: image clip reveals
+  $$('.profile .pph').forEach(el=>gsap.fromTo(el,{clipPath:'inset(100% 0% 0% 0% round 8px)'},{clipPath:'inset(0% 0% 0% 0% round 8px)',duration:1.2,ease:'expo.out',scrollTrigger:{trigger:el,start:'top 85%'}}));
+
+  addEventListener('load',()=>ScrollTrigger.refresh());
+})();
+</script>
+
+</body>
+</html>
